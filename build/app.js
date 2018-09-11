@@ -3,7 +3,7 @@ const http = require("http");
 const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
-const router = require("./express-router");
+const router = require("../express-router");
     
 const webpack = require("webpack");
 const webpackMW = require("webpack-hot-middleware");
@@ -42,10 +42,10 @@ if (env) {
         });
     }
 } else {
-    app.use(express.static(path.resolve(__dirname, "dist")));
+    app.use(express.static(path.resolve(__dirname, "../dist")));
 
     app.get("/", (req, res) =>{
-        res.sendFile(path.resolve(__dirname, "dist/index.html"));
+        res.sendFile(path.resolve(__dirname, "../dist/index.html"));
     });
 
 

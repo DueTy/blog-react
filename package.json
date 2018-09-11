@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --progress --profile --colors --config webpack.production.config.js",
+    "build": "webpack --progress --profile --colors --config ./build/webpack.production.config.js",
     "dll": "webpack --config webpack.dll.config.js",
-    "dev": "set NODE_ENV=development && node app",
-    "start": "node app.js"
+    "dev": "set NODE_ENV=development && node ./build/app",
+    "start": "node ./build/app.js"
   },
   "repository": {
     "type": "git",
