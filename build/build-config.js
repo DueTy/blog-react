@@ -11,7 +11,6 @@ let paths = {
     },
     outputHtmlConfig = {
         title: "Dlog",
-        favicon: path.resolve(__dirname, "../src/favicon.ico"),
         template: path.resolve(__dirname, "../src/index.html")
     },
     rules = [      

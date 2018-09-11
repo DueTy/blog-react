@@ -76,6 +76,7 @@
     "mysql": "latest",
     "nprogress": "^0.2.0",
     "qs": "^6.5.2",
+    "serve-favicon": "^2.5.0",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-dev-middleware": "^3.0.0",
     "webpack-hot-middleware": "^2.23.1"

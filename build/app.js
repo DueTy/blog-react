@@ -4,6 +4,7 @@ const path = require("path");
 const express = require("express");
 const morgan = require("morgan");
 const router = require("../express-router");
+const favicon = require("serve-favicon");
     
 const webpack = require("webpack");
 const webpackMW = require("webpack-hot-middleware");
@@ -12,6 +13,7 @@ const webpackDW = require("webpack-dev-middleware");
 let app = express();
 
 app.use(morgan("short"));
+app.use(favicon(path.resolve(__dirname, "../favicon.ico")));
 app.use("/", router);
 
 var env = process.env.NODE_ENV;
