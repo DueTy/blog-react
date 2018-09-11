@@ -10,7 +10,6 @@ let paths = {
         templateSrc: "../src/index.html"
     },
     outputHtmlConfig = {
-        title: "Dlog",
         template: path.resolve(__dirname, "../src/index.html")
     },
     rules = [      
