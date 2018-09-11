@@ -55,7 +55,7 @@ if (env) {
         
         let server = http.createServer(app);
 
-        server.listen(80, "0.0.0.0", () => {
+        server.listen(3389, "0.0.0.0", () => {
             console.log("Server runs on %j", server.address());    
         });
     }
