@@ -1,6 +1,6 @@
 import React from "react";
 import { Menu, Icon } from "antd";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 const renderMenuItem = ({ key, title, icon, link, ...props }) =>
     <Menu.Item
         key={key || link}

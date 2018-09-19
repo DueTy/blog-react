@@ -8,10 +8,25 @@ import ReactDOM from "react-dom";
 import RouterVew from "./router-view";
 import "./common/http";
 
-ReactDOM.render(
-    <RouterVew />,
-    document.getElementById("app")
-)
+import { Provider } from "react-redux";
+import reducers from "./reducers";
+import { createStore } from "redux";
+
+const store = createStore(reducers);
+window.store = store;
+
+const render = Component => {
+    ReactDOM.render(
+        (
+            <Provider store={store}>
+                <Component></Component>
+            </Provider>
+        ),
+        document.getElementById("app")
+    )
+};
+
+render(RouterVew);
 
 
 if (module.hot) {

@@ -4,21 +4,21 @@ const TabPane = Tabs.TabPane;
 
 import TagEdit from "./tag-edit";
 import ArticleEdit from "./article-edit";
+import { connect } from "react-redux";
+import noPermission from "../../assets/images/no-permission.png";
 import "./index.less";
 
-
-class Admin extends React.Component{    
+export default connect(
+    state => state.user
+)(class Admin extends React.Component{    
     constructor(props){
         super(props);
-
-        this.state = {
-            
-        }
-
     }
     render(){
         return (
             <div className="admin">
+            {
+                this.props.user ? 
                 <Tabs tabPosition="left" type="card">
                     <TabPane tab="文章编辑" key="1">
                         <ArticleEdit />
@@ -26,10 +26,10 @@ class Admin extends React.Component{
                     <TabPane tab="属性" key="2">
                         <TagEdit/>
                     </TabPane>
-                </Tabs>
+                </Tabs> :
+                <img src={noPermission} style={{display: "block", margin: "auto"}} />
+            } 
             </div>
         )
     }
-};
-
-export default Admin;
+});

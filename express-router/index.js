@@ -141,8 +141,6 @@ router.post("/postArticle", (req, res) => {
     if (id) {
         res.send(packRes({ message: "fail" }, 0));
     } else {
-        
-        
         let newId = uuidV4(),
             data = {
                 id: newId,
@@ -168,6 +166,52 @@ router.post("/postArticle", (req, res) => {
     }
     
 });
+
+router.post("/login", (req, res) => {
+    let reqBody = req.body,
+        args = {
+            table: "user",
+            condition: `username='${reqBody.username}'`
+        };
+
+    db.getter(args, (error, result) => {
+        let queryUser = result[0];
+
+        if (!queryUser) {
+            res.send(packRes({ message: "用户不存在" }, 0));
+            return false;
+        }
+        
+        if (reqBody.password !== queryUser.password) {
+            res.send(packRes({ message: "密码不正确" }, 0));
+            return false;
+        }
+
+        if (reqBody.password === queryUser.password) {
+            let isLogin = {
+                userId: queryUser.user_id,
+                username: queryUser.username
+            };
+            
+            res.locals.isLogin = isLogin;
+            res.cookie("isLogin", res.locals.isLogin, {
+                maxAge: 60000
+            });
+
+            res.send(packRes({ message: "登录成功，正在跳转" }, 1));
+        }
+    });
+});
+
+
+router.get("/checkStatus", (req, res) => {
+    let isLogin = req.cookies.isLogin;
+
+    if (isLogin) {
+        res.send({ isLogin });
+    }
+});
+
 
 
 
