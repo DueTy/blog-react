@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --progress --profile --colors --config ./build/webpack.production.config.js",
     "dll": "webpack --config webpack.dll.config.js",
-    "dev": "set NODE_ENV=development && node ./build/app",
+    "dev": "set NODE_ENV=development && nodemon --config ./express-router/nodemon-config.json ./build/app",
     "start": "node ./build/app.js"
   },
   "repository": {
@@ -52,6 +52,8 @@
     "resolve-from": "^4.0.0",
     "style-loader": "^0.22.1",
     "url-loader": "^1.0.1",
+    "uuid": "^3.0.1",
+    "silly-datetime": "^0.1.2",
     "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"
@@ -65,7 +67,6 @@
     "clean-webpack-plugin": "^0.1.19",
     "cookie-parser": "~1.4.3",
     "debug": "~2.2.0",
-    "ejs": "^2.6.1",
     "express": "~4.13.4",
     "express-session": "latest",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
@@ -74,6 +75,7 @@
     "marked": "^0.5.0",
     "morgan": "~1.7.0",
     "mysql": "latest",
+    "nodemon": "^1.18.4",
     "nprogress": "^0.2.0",
     "qs": "^6.5.2",
     "serve-favicon": "^2.5.0",

@@ -63,7 +63,7 @@ class PageSider extends React.Component{
                 <section className="tag-container block">
                     <Card title="标签">
                     {
-                        this.state.tags.length ? <div className="tags">
+                        this.state.tags.length ? <div>
                         {
                             this.state.tags.map((tag, key) => (
                                 <Tag

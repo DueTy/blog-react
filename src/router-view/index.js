@@ -18,7 +18,7 @@ export default () => (
                     md={{ span: 16 }}
                     xs={{ span: 24 }}
                     className="view-container">
-                        <Route exact path="/" render={ () => <Redirect to="/app/index" /> } />
+                        <Route exact path="/" render={ () => <Redirect to="/app/admin" /> } />
                         {
                             routes.map(({key, path, component, props}) => (
                                 <Route 

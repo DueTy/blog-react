@@ -1,10 +1,18 @@
-let express = require("express");
-let path = require("path");
-let { listItem, archiveItem, collectionItem, articleItem } = require("./list-item-sample");
-let router = express.Router();
+let express = require("express"),
+    { listItem, archiveItem, collectionItem, articleItem } = require("./list-item-sample"),
+    db = require("./db-query");
+
+let router = express.Router(),
+    uuidV4 = require("uuid/v4"),
+    utils = require("./utils"),
+    packRes = utils.packRes,
+    packInsert = utils.packInsert,
+    packUpdate = utils.packUpdate,
+    getTime = utils.getTime,
+    getDate = utils.getDate,
+    calcuByteLength = utils.calcuByteLength;
 
 
-/* GET users listing. */
 router.get("/getArticleList", (req, res, next) => {
     let items = [];
     delete listItem.content;
@@ -39,5 +47,128 @@ router.get("/getCollectionList", (req, res, next) => {
 router.get("/getArticle", (req, res, next) => { 
     res.send(articleItem);
 });
+
+//获取标签
+router.get("/getTag", (req, res) => {
+    
+    let id = req.query.id,
+        args = {
+            table: "tag"
+        };
+
+    id && (args.condition = "tag_id='" + id + "'");
+
+    db.getter(args, (err, result) => {        
+        res.send(packRes({//打包res
+            result
+        }, 1));
+    });
+});
+
+//添加标签
+router.post("/addTag", (req, res) => {
+    let tag_name = req.body.name,
+        checkArgs = {
+            table: "tag",
+            condition: "tag_name='" + tag_name + "'"
+        };
+    
+    db.getter(checkArgs, (err, result) => {
+        if (result.length) {
+            res.send(packRes({ 
+                message: tag_name + "已存在，请勿重复添加"
+            }, 0));
+        } else {
+
+            let result = {
+                    tag_id: uuidV4(),
+                    tag_name: tag_name,
+                    created_at: getTime(),
+                    modify_time: getTime()
+                },
+                args = packInsert(result);
+
+            args.table = "tag";
+            
+            db.adder(args, (error, result) => {
+                res.send(packRes({ 
+                    message: result.affectedRows ? "添加成功" : "添加失败"
+                }, 1));
+            });
+        }
+    });
+});
+
+//修改标签
+router.post("/modifyTag", (req, res) => {
+    let reqBody = req.body,
+        checkArgs = {
+            table: "tag",
+            condition: "tag_id='" + reqBody.id + "'"
+        };
+    
+    db.getter(checkArgs, (error, result) => {
+        let tag = result[0];
+
+        if (tag.tag_name === reqBody.name) {
+            res.send(packRes({ message: "名称重复" }, 0));
+        } else {
+            let data = { tag_name: reqBody.name };
+
+            data.modify_time = getTime();
+
+            let args = packUpdate(data);
+            
+            Object.assign(args, {
+                table: "tag",
+                condition: "tag_id='" + reqBody.id + "'"
+            });
+
+            db.updater(args, (error, result) => {
+
+                res.send(packRes({ 
+                    message: result.affectedRows ? "修改成功" : "修改失败"
+                }, 1));                
+            });
+        }
+    });
+});
+
+router.post("/postArticle", (req, res) => { 
+    let reqBody = req.body,
+        id = reqBody.id;
+
+    if (id) {
+        res.send(packRes({ message: "fail" }, 0));
+    } else {
+        
+        
+        let newId = uuidV4(),
+            data = {
+                id: newId,
+                title: reqBody.title,
+                type: "arti",
+                tags: reqBody.tag,
+                created_at: getTime(),
+                modify_time: getTime(),
+                content: reqBody.content,
+                abstract: reqBody.abstract,
+                size: calcuByteLength(reqBody.content)           
+            },
+            args = packInsert(data);
+
+        args.table = "article";
+
+        db.adder(args, (error, result) => {
+            res.send(packRes({ 
+                message: result.affectedRows ? "添加成功" : "添加失败", 
+                id: result.affectedRows ? newId : "",
+            }, result.affectedRows));
+        });
+    }
+    
+});
+
+
 
 module.exports = router;

@@ -1,0 +1,3 @@
+{
+    "watch": ["express-router/*.*"]
+}

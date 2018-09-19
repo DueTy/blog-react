@@ -24,7 +24,7 @@ let paths = {
             use: ExtractTextPlugin.extract({
                 fallback: "style-loader", 
                 use: "css-loader",
-                publicPath: paths.publicPath
+                publicPath: paths.publicPath,
             })
         },{
             test:/\.less$/,

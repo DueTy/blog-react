@@ -5,6 +5,8 @@ const express = require("express");
 const morgan = require("morgan");
 const router = require("../express-router");
 const favicon = require("serve-favicon");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
     
 const webpack = require("webpack");
 const webpackMW = require("webpack-hot-middleware");
@@ -14,6 +16,10 @@ let app = express();
 
 app.use(morgan("short"));
 app.use(favicon(path.resolve(__dirname, "../favicon.ico")));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser("An"));
+
 app.use("/", router);
 
 var env = process.env.NODE_ENV;

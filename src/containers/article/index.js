@@ -26,7 +26,7 @@ class Article extends React.Component{
         hljs.registerLanguage("javascript", javascript);    
         marked.setOptions({
             highlight: code => hljs.highlightAuto(code).value
-        })
+        });
     }
     componentDidMount(){
         this.state.id && this.getArticle(this.state.id);

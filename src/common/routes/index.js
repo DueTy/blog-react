@@ -2,6 +2,7 @@ import Index from "../../containers/index";
 import ArchivePage from "../../containers/archive";
 import CollectionPage from "../../containers/collection";
 import Article from "../../containers/article";
+import Admin from "../../containers/admin";
 
 export const routes = [
     {
@@ -20,5 +21,9 @@ export const routes = [
         key: "文章",
         path: "/app/article/:id",
         component: Article
+    },{
+        key: "后台管理",
+        path: "/app/admin",
+        component: Admin
     }
 ];
