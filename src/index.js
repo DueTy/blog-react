@@ -13,7 +13,7 @@ import reducers from "./reducers";
 import { createStore } from "redux";
 
 const store = createStore(reducers);
-window.store = store;
+// window.store = store;
 
 const render = Component => {
     ReactDOM.render(
