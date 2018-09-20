@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, Select, Form, Col, Row, Button, message, Badge, Tag, Input } from "antd";
 import axios from "axios";
-import { colors } from "../../utils";
 const Option = Select.Option;
 const FormItem = Form.Item;
 
