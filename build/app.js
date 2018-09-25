@@ -15,7 +15,7 @@ const webpackDW = require("webpack-dev-middleware");
 let app = express();
 
 app.use(morgan("short")); //日志组件
-app.use(favicon(path.resolve(__dirname, "../favicon.ico")));
+app.use(favicon(path.resolve(__dirname, "../favicon.ico"))); //网站ico
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser("An"));
