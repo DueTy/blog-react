@@ -14,6 +14,10 @@ let router = express.Router(),
 
 
 router.get("/getArticleList", (req, res, next) => {
+    
+    
+    
+
     let items = [];
     delete listItem.content;
     for (let index = 0; index < 3; index++) {
@@ -22,6 +26,7 @@ router.get("/getArticleList", (req, res, next) => {
 
     res.send(items);
 });
+
 
 router.get("/getArchiveList", (req, res, next) => {
     let items = [];

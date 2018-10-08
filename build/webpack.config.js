@@ -1,4 +1,3 @@
-const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require("webpack");
@@ -34,6 +33,6 @@ module.exports = {
         new HtmlWebpackPlugin(bdConfig.outputHtmlConfig),
         new ExtractTextPlugin("css/index.css"),
         new webpack.NamedModulesPlugin(),      
-		new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin()
     ]
 };

@@ -22,13 +22,27 @@ let paths = {
         },{
             test:/\.css$/,
             use: ExtractTextPlugin.extract({
-                fallback: "style-loader", 
+                fallback: "style-loader",
                 use: "css-loader",
                 publicPath: paths.publicPath,
             })
         },{
             test:/\.less$/,
-            use:["style-loader", "css-loader", "less-loader"]
+            use:[
+                "style-loader",
+                "css-loader",
+                "less-loader",
+                {
+                    loader: "postcss-loader", 
+                    options: {
+                        plugins: [
+                            require("autoprefixer")("last 100 versions")
+                        ]
+                    }
+                }
+            ],
+            // exclude: path.resolve(__dirname, "/node_modules"),
+            // include: path.resolve(__dirname, "src")
         },{
             test:/\.(png|jpg|gif)$/,
             use:[{
