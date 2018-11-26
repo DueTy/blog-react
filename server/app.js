@@ -26,7 +26,7 @@ var env = process.env.NODE_ENV;
 
 if (env) {
     
-    let webpackConfig = require("./webpack.config"),
+    let webpackConfig = require("../build/webpack.dev.config"),
         compiler = webpack(webpackConfig),
         heartbeatS = 10;
     

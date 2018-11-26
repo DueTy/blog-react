@@ -1,0 +1,16 @@
+{ 
+    "entries": [
+        {
+            "name": "index",
+            "path": "src/index",
+            "index": "index.html"
+        }
+    ],
+    "paths": {
+        "dll": "dist",
+        "dist": "dist"
+    },
+    "dll-sources": [
+        "lodash", "react", "react-dom", "react-redux", "react-router-dom", "redux"
+    ]
+}

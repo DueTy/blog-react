@@ -5,11 +5,11 @@
 import "./index.less";
 import React from "react";
 import ReactDOM from "react-dom";
-import RouterVew from "./router-view";
-import "./common/http";
+import RouterVew from "../router-view";
+import "../common/http";
 
 import { Provider } from "react-redux";
-import reducers from "./reducers";
+import reducers from "../reducers";
 import { createStore } from "redux";
 
 const store = createStore(reducers);
