@@ -26,7 +26,7 @@ var env = process.env.NODE_ENV;
 
 if (env) {
     
-    let webpackConfig = require("./webpack.config"),
+    let webpackConfig = require("../build/webpack.dev.config"),
         compiler = webpack(webpackConfig),
         heartbeatS = 10;
     
@@ -60,7 +60,7 @@ if (env) {
         
         let server = http.createServer(app);
 
-        server.listen(80, "0.0.0.0", () => {
+        server.listen(8000, "0.0.0.0", () => {
             console.log("Server runs on %j", server.address());    
         });
     }

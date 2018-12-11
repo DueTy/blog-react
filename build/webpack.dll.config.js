@@ -1,26 +1,26 @@
 const path = require("path");
 const webpack = require("webpack");
+const CleanWebpackPlugin = require("clean-webpack-plugin"); // 清空打包目录的插件
+const config = require("./config.json");
+const paths = config.paths;
+const vendor = config["dll-sources"];
+
 module.exports = {
-    mode: "production",
+    context: path.resolve(__dirname, "../"),
     entry: {
-        vendor: [
-            "react",
-            "react-router-dom",
-            "react-dom"
-        ]
+        vendor
     },
     output: {
-        path: path.join(__dirname, "dll"), //放在项目的static/js目录下面
-        filename: "[name].dll.js", //打包文件的名字
-        library: "[name]_library" //可选 暴露出的全局变量名
-        // vendor.dll.js中暴露出的全局变量名。
-        // 主要是给DllPlugin中的name使用，
-        // 故这里需要和webpack.DllPlugin中的`name: "[name]_library",`保持一致。
+        path: path.join(__dirname, "..", paths.dll),
+        filename: "[name].dll.js",
+        library: "_dll_[name]" // 全局变量名，其他模块会从此变量上获取里面模块
     },
+    // manifest是描述文件
     plugins: [
         new webpack.DllPlugin({
-            path: path.join(__dirname, "dll/[name]-manifest.json"), //生成上文说到清单文件，放在当前build文件下面，这个看你自己想放哪里了。
-            name: "[name]_library"
+            name: "_dll_[name]",
+            path: path.join(__dirname, "..", paths.dll, "/manifest.json"),
+            context: path.resolve(__dirname, "../")
         })
     ]
 };
