@@ -1,4 +1,5 @@
-"use strict"
+"use strict";
+
 const path = require("path");
 const chalk = require("chalk");
 
@@ -6,10 +7,8 @@ const ProgressBarPlugin = require("progress-bar-webpack-plugin");
 
 const HappyPack = require("happypack");
 const os = require("os");
-const webpack = require("webpack");
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 
-const HtmlWebpackPlugin = require("html-webpack-plugin"); // 生成html
 const MiniCssExtractPlugin = require("mini-css-extract-plugin"); // 生成css
 const config = require("./config.json");
 
@@ -20,17 +19,17 @@ function resolve(dir) {
 function assetsPath(_path_) {
     let assetsSubDirectory;
     if (process.env.NODE_ENV === "production") {
-        assetsSubDirectory = "static"; //当前为static
+        assetsSubDirectory = "static"; // 当前为static
     } else {
         assetsSubDirectory = "static";
     }
     return path.posix.join(assetsSubDirectory, _path_);
 }
 
-function genEntries(pages){
+function genEntries(pages) {
     let entry = {};
 
-    pages.forEach((page) => {
+    pages.forEach(page => {
         entry[page.name] = path.resolve("./", page.path);
     });
     
@@ -46,7 +45,7 @@ module.exports = {
     },
     resolve: {
         extensions: [".js", ".css", ".json"],
-        alias: {} //配置别名可以加快webpack查找模块的速度
+        alias: {} // 配置别名可以加快webpack查找模块的速度
     },
     module: {
         rules: [
@@ -63,8 +62,8 @@ module.exports = {
             {
                 test: /\.jsx?$/,
                 loader: "happypack/loader?id=happy-babel-js",
-                include: [resolve("src")],
-                exclude: /node_modules/,
+                include: [ resolve("src") ],
+                exclude: /node_modules/
             },
             { 
                 test: /\.(png|jpg|jpeg|gif|svg)/,
@@ -94,7 +93,7 @@ module.exports = {
             }
         ]
     },
-    optimization: { //webpack4的最新优化配置项，用于提取公共代码
+    optimization: { // webpack4的最新优化配置项，用于提取公共代码
         splitChunks: {
             cacheGroups: {
                 commons: {
@@ -120,21 +119,6 @@ module.exports = {
         }),
         new ProgressBarPlugin({
             format: "  build [:bar] " + chalk.green.bold(":percent") + " (:elapsed seconds)"
-        }),
-        new webpack.DllReferencePlugin({
-            manifest: path.resolve(__dirname, "..", config.paths.dll, "manifest.json")
-        }),
-        ...config.entries.map((page) => { // 多页面
-            return new HtmlWebpackPlugin({
-                template: path.resolve(__dirname, "..", page.path, page.index),
-                filename: `${page.name}.html`,
-                chunks: [page.name, "common"],
-                vendor: "./vendor.dll.js", //与dll配置文件中output.fileName对齐
-                hash: true,//防止缓存
-                minify: {
-                    removeAttributeQuotes: true//压缩 去掉引号
-                }
-            });
         })
     ]
 };

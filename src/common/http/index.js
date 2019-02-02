@@ -1,11 +1,11 @@
 import axios from "axios";
-import "../../../node_modules/nprogress/nprogress.css";
+import "./nprogress.css";
 import NProgress from "nprogress";
 import qs from "qs";
 
 axios.defaults.baseURL = "/";
 
-axios.interceptors.request.use(function (config) {
+axios.interceptors.request.use(config => {
     if (config.method === "post") {
         config.data = qs.stringify(config.data);
     }
@@ -13,7 +13,7 @@ axios.interceptors.request.use(function (config) {
     return config;
 });
 
-axios.interceptors.response.use(function (config) {
+axios.interceptors.response.use(config => {
     NProgress.done();
     return config;
 });

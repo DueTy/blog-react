@@ -17,6 +17,11 @@ module.exports = {
     },
     // manifest是描述文件
     plugins: [
+        new CleanWebpackPlugin(["vendor.dll.js", "mainifest.json"], {
+            root: path.resolve("../dist"),
+            verbose: true,
+            dry: false
+        }),
         new webpack.DllPlugin({
             name: "_dll_[name]",
             path: path.join(__dirname, "..", paths.dll, "/manifest.json"),

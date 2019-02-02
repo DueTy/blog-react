@@ -9,15 +9,10 @@ let router = express.Router(),
     packInsert = utils.packInsert,
     packUpdate = utils.packUpdate,
     getTime = utils.getTime,
-    getDate = utils.getDate,
     calcuByteLength = utils.calcuByteLength;
 
 
 router.get("/getArticleList", (req, res, next) => {
-    
-    
-    
-
     let items = [];
     delete listItem.content;
     for (let index = 0; index < 3; index++) {

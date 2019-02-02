@@ -1,5 +1,5 @@
 
-const sillyDt = require("silly-datetime");
+const Moment = require("moment");
 
 function packRes(result, type) {
     let resMsg = type ? { msg: "success", code: 1 } : { msg: "failed", code: 0 };
@@ -9,7 +9,7 @@ function packRes(result, type) {
 function packInsert(data) {
     let length = [],
         insert = [];
-    Object.keys(data).forEach((field) => {
+    Object.keys(data).forEach(field => {
         length.push("?");
         insert.push(data[field]);
     });
@@ -24,7 +24,7 @@ function packInsert(data) {
 function packUpdate(data) {
     let opt = [];
 
-    Object.keys(data).forEach((field) => {
+    Object.keys(data).forEach(field => {
         opt.push(field + "='" + data[field] + "'");
     });
 
@@ -47,15 +47,11 @@ function calcuByteLength(text) {
     return byteStr;
 }
 
-function getTime() {
-    return sillyDt.format(new Date(), "YYYY-MM-DD hh:mm:ss");
-}
-
-function getDate(dateTime) {
-    return sillyDt.format(dateTime, "YYYY-MM-DD");
+function getTime(dateTime) {
+    return Moment(dateTime ? dateTime : new Date()).format("YYYY-MM-DD hh:mm:ss");
 }
 
 
 module.exports = {
-    packRes, packInsert, packUpdate, getTime, getDate, calcuByteLength
+    packRes, packInsert, packUpdate, getTime, calcuByteLength
 };

@@ -8,14 +8,15 @@ const baseConfig = require("./webpack.base");
 // const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin; //打包分析
 const merge = require("webpack-merge");
 
-const glob = require("glob");
-const PurifyCSSPlugin = require("purifycss-webpack");
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin"); // 生成html
 const WebpackParallelUglifyPlugin = require("webpack-parallel-uglify-plugin");
-const OptimizeCSSPlugin = require("optimize-css-assets-webpack-plugin");
+const config = require("./config.json");
 
 module.exports = merge(baseConfig, {
-    output:{
-        publicPath: "./" //这里要放的是静态资源CDN的地址(一般只在生产环境下配置)
+    output: {
+        publicPath: "./" // 这里要放的是静态资源CDN的地址(一般只在生产环境下配置)
+
     },
     plugins: [
         new CopyWebpackPlugin([
@@ -29,19 +30,13 @@ module.exports = merge(baseConfig, {
             root: path.join(__dirname, ".."),
             exclude: ["manifest.json", "vendor.dll.js"],
             verbose: true,
-            dry:  false
-        }),
-        new OptimizeCSSPlugin({
-            cssProcessorOptions: {safe: true}
-        }),
-        new PurifyCSSPlugin({
-            paths: glob.sync(path.join(__dirname, "../src/*.html"))
+            dry: false
         }),
         new WebpackParallelUglifyPlugin({
             uglifyJS: {
                 output: {
-                    beautify: false, //不需要格式化
-                    comments: false //不保留注释
+                    beautify: false, // 不需要格式化
+                    comments: false // 不保留注释
                 },
                 compress: {
                     warnings: false, // 在UglifyJs删除没有用到的代码时不输出警告
@@ -51,6 +46,21 @@ module.exports = merge(baseConfig, {
                 }
             }
         }),
+        new webpack.DllReferencePlugin({
+            manifest: path.resolve(__dirname, "..", config.paths.dll, "manifest.json")
+        }),
+        ...config.entries.map(page => { // 多页面
+            return new HtmlWebpackPlugin({
+                template: path.resolve(__dirname, "..", page.path, page.index),
+                filename: `${page.name}.html`,
+                chunks: [page.name, "common"],
+                vendor: "./vendor.dll.js", // 与dll配置文件中output.fileName对齐
+                hash: true, // 防止缓存
+                minify: {
+                    removeAttributeQuotes: true // 压缩 去掉引号
+                }
+            });
+        })
         // new BundleAnalyzerPlugin()
     ]
 });

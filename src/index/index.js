@@ -18,11 +18,11 @@ const render = Component => {
     ReactDOM.render(
         (
             <Provider store={store}>
-                <Component></Component>
+                <Component />
             </Provider>
         ),
         document.getElementById("app")
-    )
+    );
 };
 
 render(RouterVew);
