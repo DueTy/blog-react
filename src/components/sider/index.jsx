@@ -5,8 +5,8 @@ import avator from "../../assets/images/avator.png";
 import { colors } from "../../utils";
 import "./index.less";
 
-class PageSider extends React.Component{
-    constructor(props){
+class PageSider extends React.Component {
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -24,14 +24,14 @@ class PageSider extends React.Component{
             ]
         });
     }
-    getTags(){
+    getTags() {
         this.setState({
             tags: [
                 "嘻嘻嘻", "哈哈哈", "学习", "入门到放弃", "JavaScript", "react"
             ]
         });
     }
-    componentDidMount(){
+    componentDidMount() {
         this.getRecent();
         this.getTags();
     }
@@ -39,7 +39,7 @@ class PageSider extends React.Component{
         return(
             <div className="page-sider">
                 <section className="avator-container block">
-                    <img src={avator}/>
+                    <img src={avator} />
                     <p className="bloger">DueTy</p>
                     <p className="slogan">
                         b3auDy Of This World
@@ -62,19 +62,19 @@ class PageSider extends React.Component{
                 </section>
                 <section className="tag-container block">
                     <Card title="标签">
-                    {
-                        this.state.tags.length ? <div>
                         {
-                            this.state.tags.map((tag, key) => (
-                                <Tag
-                                    color={colors[Math.floor(Math.random() * colors.length)]}
-                                    key={key}>
-                                    {tag}
-                                </Tag>
-                            ))
+                            this.state.tags.length ? <div>
+                                {
+                                    this.state.tags.map((tag, key) => (
+                                        <Tag
+                                            color={colors[Math.floor(Math.random() * colors.length)]}
+                                            key={key}>
+                                            {tag}
+                                        </Tag>
+                                    ))
+                                }
+                            </div> : null
                         }
-                        </div> : null
-                    }
                     </Card>
                 </section>
             </div>

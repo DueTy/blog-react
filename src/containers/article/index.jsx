@@ -10,10 +10,10 @@ import { colors, timerTrans } from "../../utils";
 
 import "./index.less";
 
-class Article extends React.Component{
-    constructor(props){
+class Article extends React.Component {
+    constructor(props) {
         super(props);
-        this.state = {
+        this.state =  {
             id: this.props.match.params.id,
             article: {
                 tags: ""
@@ -21,47 +21,47 @@ class Article extends React.Component{
         };
 
         this.getArticle = this.getArticle.bind(this);
-    };    
-    componentWillMount() {    
+    }
+    componentWillMount()  {    
         hljs.registerLanguage("javascript", javascript);    
         marked.setOptions({
             highlight: code => hljs.highlightAuto(code).value
         });
     }
-    componentDidMount(){
+    componentDidMount() {
         this.state.id && this.getArticle(this.state.id);
     }
-    getArticle(id){
-        axios.get("getArticle", {
+    getArticle(id) {
+        axios.get("getArticle",  {
             params: {
                 id: id
             }
-        }).then(res => {
+        }).then(res =>  {
             this.setState({
                 article: res.data
             });
-        })
+        });
     }
-    render(){        
+    render() {        
         const IconText = ({ type, text }) => (
             <span>
-                <Icon type={type} style={{ marginRight: 8 }} />
+                <Icon type= {type} style= {{marginRight: 8 }} />
                 {text}
             </span>
         );
         return(
             <Row>
                 <Col                
-                    lg={{ span: 22, offset: 1 }}
-                    md={{ span: 22, offset: 1 }}
-                    xs={{ span: 22 }}>
+                    lg= {{span: 22, offset: 1 }}
+                    md= {{span: 22, offset: 1 }}
+                    xs= {{span: 22 }}>
                     <Card className="article-wrapper"
-                        title={this.state.article.title}
-                        extra={[
+                        title= {this.state.article.title}
+                        extra= {[
                             <Tag color="red" key="author">
                                 作者：掘金上找的
                             </Tag>,
-                            <span style={{marginTop: 10}} key="time">
+                            <span style= {{marginTop: 10}} key="time">
                                 {
                                 this.state.article.created_at
                                 ? timerTrans(this.state.article.created_at)
@@ -70,30 +70,28 @@ class Article extends React.Component{
                             </span>
                         ]}>
                         <div className="article-tags">
-                            <span>{this.state.article.readSize} 次浏览</span>
-                            <IconText type="tags-o" text={
+                            <span> {this.state.article.readSize} 次浏览</span>
+                            <IconText type="tags-o" text= {
                                 this.state.article.tags.split(",").map(tag => (
-                                <Tag
-                                    key={tag}
-                                    color={colors[Math.floor(Math.random() * colors.length)]}>
-                                    {tag}
-                                </Tag>
+                                    <Tag
+                                        key= {tag}
+                                        color= {colors[Math.floor(Math.random() * colors.length)]}>
+                                        {tag}
+                                    </Tag>
                                 ))}
                             />
                         </div>
                         <div className="article-content" 
-                            dangerouslySetInnerHTML={
-                                {
-                                    __html: this.state.article.content ? marked(this.state.article.content) : null
-                                }
-                            }
+                            dangerouslySetInnerHTML= {{
+                                __html: this.state.article.content ? marked(this.state.article.content) : null
+                            }}
                         />
                     </Card>
 
                 </Col>
             </Row>
-        )
+        );
     }
-};
+}
 
 export default Article;

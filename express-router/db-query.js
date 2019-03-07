@@ -9,10 +9,10 @@ const tables = {
     archive: " archive "
 };
 
-function getter(args, callback){  
+function getter(args, callback) {  
     let filed  = args.filed ? args.filed : " * ",
         table = tables[args.table],
-        condition = args.condition ? " where " + args.condition: "",
+        condition = args.condition ? " where " + args.condition : "",
         sql = "select" + filed + "from" + table + condition;
 
     connect.query(sql, (error, result) => {
@@ -23,7 +23,7 @@ function getter(args, callback){
     });
 }
 
-function adder(args, callback){
+function adder(args, callback) {
     let sql = "insert into" + tables[args.table] + "value" + args.length;
 
     connect.query(sql, args.insert, (error, result) => {
@@ -34,7 +34,7 @@ function adder(args, callback){
     });
 }
 
-function updater(args, callback){
+function updater(args, callback) {
     let sql = "update " + tables[args.table] + " set " + args.opt + " where " + args.condition;
 
     connect.query(sql, (error, result) => {

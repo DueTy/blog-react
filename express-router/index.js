@@ -1,8 +1,10 @@
-let express = require("express"),
+const 
+    express = require("express"),
     { listItem, archiveItem, collectionItem, articleItem } = require("./list-item-sample"),
     db = require("./db-query");
 
-let router = express.Router(),
+const 
+    router = express.Router(),
     uuidV4 = require("uuid/v4"),
     utils = require("./utils"),
     packRes = utils.packRes,
@@ -48,7 +50,7 @@ router.get("/getArticle", (req, res, next) => {
     res.send(articleItem);
 });
 
-//获取标签
+// 获取标签
 router.get("/getTag", (req, res) => {
     
     let id = req.query.id,
@@ -59,13 +61,13 @@ router.get("/getTag", (req, res) => {
     id && (args.condition = "tag_id='" + id + "'");
 
     db.getter(args, (err, result) => {        
-        res.send(packRes({//打包res
+        res.send(packRes({ // 打包res
             result
         }, 1));
     });
 });
 
-//添加标签
+// 添加标签
 router.post("/addTag", (req, res) => {
     let tag_name = req.body.name,
         checkArgs = {
@@ -99,7 +101,7 @@ router.post("/addTag", (req, res) => {
     });
 });
 
-//修改标签
+// 修改标签
 router.post("/modifyTag", (req, res) => {
     let reqBody = req.body,
         checkArgs = {
@@ -160,7 +162,7 @@ router.post("/postArticle", (req, res) => {
         db.adder(args, (error, result) => {
             res.send(packRes({ 
                 message: result.affectedRows ? "添加成功" : "添加失败", 
-                id: result.affectedRows ? newId : "",
+                id: result.affectedRows ? newId : ""
             }, result.affectedRows));
         });
     }
@@ -211,8 +213,5 @@ router.get("/checkStatus", (req, res) => {
         res.send({ isLogin });
     }
 });
-
-
-
 
 module.exports = router;

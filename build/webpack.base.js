@@ -44,7 +44,7 @@ module.exports = {
         filename: "[name].[hash:8].js"
     },
     resolve: {
-        extensions: [".js", ".css", ".json"],
+        extensions: [".js", ".jsx", ".css", ".json"],
         alias: {} // 配置别名可以加快webpack查找模块的速度
     },
     module: {
