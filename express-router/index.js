@@ -13,18 +13,6 @@ const
     getTime = utils.getTime,
     calcuByteLength = utils.calcuByteLength;
 
-
-router.get("/getArticleList", (req, res, next) => {
-    let items = [];
-    delete listItem.content;
-    for (let index = 0; index < 3; index++) {
-        items.push(listItem);
-    }
-
-    res.send(items);
-});
-
-
 router.get("/getArchiveList", (req, res, next) => {
     let items = [];
     delete archiveItem.content;
@@ -46,8 +34,33 @@ router.get("/getCollectionList", (req, res, next) => {
     res.send(items);
 });
 
+router.get("/getArticleList", (req, res, next) => { 
+    const
+        args = {
+            table: "article"
+        };
+    
+    db.getter(args, (err, result) => {
+        res.send(packRes({
+            result
+        }, 1));
+    });
+});
+
 router.get("/getArticle", (req, res, next) => { 
-    res.send(articleItem);
+
+    let id = req.query.id,
+        args = {
+            table: "article"
+        };
+
+    id && (args.condition = "id='" + id + "'");
+
+    db.getter(args, (err, result) => {        
+        res.send(packRes({ // 打包res
+            result
+        }, 1));
+    });
 });
 
 // 获取标签
@@ -153,7 +166,8 @@ router.post("/postArticle", (req, res) => {
                 modify_time: getTime(),
                 content: reqBody.content,
                 abstract: reqBody.abstract,
-                size: calcuByteLength(reqBody.content)           
+                size: calcuByteLength(reqBody.content),
+                author: reqBody.author        
             },
             args = packInsert(data);
 

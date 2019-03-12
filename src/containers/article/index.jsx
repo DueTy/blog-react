@@ -19,26 +19,21 @@ class Article extends React.Component {
                 tags: ""
             }
         };
-
-        this.getArticle = this.getArticle.bind(this);
-    }
-    componentWillMount()  {    
-        hljs.registerLanguage("javascript", javascript);    
-        marked.setOptions({
-            highlight: code => hljs.highlightAuto(code).value
-        });
     }
     componentDidMount() {
+        console.log(123);
+        console.log(hljs);
         this.state.id && this.getArticle(this.state.id);
+        hljs.initHighlightingOnLoad();
     }
-    getArticle(id) {
+    getArticle = id => {
         axios.get("getArticle",  {
             params: {
                 id: id
             }
         }).then(res =>  {
             this.setState({
-                article: res.data
+                article: res.data.result[0]
             });
         });
     }
@@ -59,7 +54,7 @@ class Article extends React.Component {
                         title= {this.state.article.title}
                         extra= {[
                             <Tag color="red" key="author">
-                                作者：掘金上找的
+                                作者：{this.state.article.author}
                             </Tag>,
                             <span style= {{marginTop: 10}} key="time">
                                 {
@@ -83,7 +78,7 @@ class Article extends React.Component {
                         </div>
                         <div className="article-content" 
                             dangerouslySetInnerHTML= {{
-                                __html: this.state.article.content ? marked(this.state.article.content) : null
+                                __html: this.state.article.content
                             }}
                         />
                     </Card>

@@ -26,6 +26,8 @@ var env = process.env.NODE_ENV;
 
 if (env) {
     
+    app.use(express.static(path.resolve(__dirname, "../dist")));
+    
     let webpackConfig = require("../build/webpack.dev.config"),
         compiler = webpack(webpackConfig),
         heartbeatS = 10;

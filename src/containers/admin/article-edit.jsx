@@ -1,6 +1,7 @@
 import React from "react";
 import  { Card, Select, Form, Col, Row, Button, message, Badge, Tag, Input } from "antd";
 import axios from "axios";
+import editorConfig from "./editor-config";
 const Option = Select.Option;
 const FormItem = Form.Item;
 
@@ -17,7 +18,8 @@ class ArticleEdit extends React.Component {
             article: {
                 tag: "",
                 title: ""
-            }
+            },
+            currentSelect: ""
         };
 
         this.NAME_MAP =  {
@@ -25,18 +27,13 @@ class ArticleEdit extends React.Component {
             title: "文章标题",
             content: "文章内容"
         };
-
-        let funSet = ["getTags", "handleSelect", "importCkeditorJs", "initEditor", "tagSelect", "getAbstract", "addArticle", "handleTitle"];
-
-        for (let i = 0; i < funSet.length; i++)  {
-            this[funSet[i]] = this[funSet[i]].bind(this);
-        }
     }
     componentWillMount() {
         this.getTags();
+        this.getArticles();
         this.importCkeditorJs();
     }
-    getTags() {
+    getTags = () => {
         axios.get("/getTag").then(res =>  {
             let tagList = res.data.result.map((tag, key) =>  {
                 tag.selected = false;
@@ -45,7 +42,14 @@ class ArticleEdit extends React.Component {
             this.setState({ tagList });
         });
     }
-    tagSelect(index) {
+    getArticles = () => {
+        axios.get("/getArticleList").then(res => {
+            const articleList = res.data.result;
+
+            this.setState({ articleList });
+        });
+    }
+    tagSelect = inde => {
 
         let tagList = this.state.tagList,
             article = this.state.article,
@@ -62,16 +66,21 @@ class ArticleEdit extends React.Component {
         
         this.setState({ tagList, article });
     }
-    handleSelect(value, key) {
-        console.log(value, key);
+    handleModifyClick = () => {
+        const article = this.state.articleList.filter(article => 
+            article.id === this.state.currentSelect
+        )[0];
+        console.log(article);
+        console.log(this.state.editor);
+        this.state.editor.setData(article.content);
     }
-    handleTitle(e) {
+    handleTitle = e => {
         let article = this.state.article;
         article.title = e.target.value;     
 
         this.setState({ article });
     }
-    importCkeditorJs() {
+    importCkeditorJs = () => {
         if (window.CKEDITOR)  {
             this.setState({ ckeLoaded: true });   
             return false;
@@ -85,10 +94,10 @@ class ArticleEdit extends React.Component {
         scriptTag.onerror = () =>  {
             message.error("cke资源加载失败");
         };
-        scriptTag.setAttribute("src", "https://cdn.ckeditor.com/4.7.1/standard/ckeditor.js");
+        scriptTag.setAttribute("src", "/static/assets/ckeditor4.7/ckeditor.js");
         document.body.appendChild(scriptTag);
     }
-    initEditor() {
+    initEditor = () => {
 
         if (!this.state.ckeLoaded)  {
             message.warning("正在加载cke资源");
@@ -103,7 +112,7 @@ class ArticleEdit extends React.Component {
         let editor = window.CKEDITOR.replace("editor");        
         this.setState({ editor });
     }
-    getAbstract(text) {
+    getAbstract = text => {
         let abstract = "";
         if (text.length > 80) {
             abstract = text.substring(0, 80);
@@ -112,15 +121,15 @@ class ArticleEdit extends React.Component {
         }
         return abstract;
     }
-    addArticle() {
+    addArticle = () => {
         let article = this.state.article,
+            editor = this.state.editor,
             data =  {
-                title: article.title || "随笔",
+                title: article.title || "随便写写",
                 tag: article.tag || "学习",
-                // content: editor.getData(),
-                // abstract: editor.document.getBody().getText()
-                content: "<p>只是一篇随笔</p>",
-                abstract: "这是一篇随笔"
+                content: editor.getData(),
+                abstract: editor.document.getBody().getText(),
+                author: article.author || "DueTy"
             },
             flag = true;
 
@@ -153,24 +162,16 @@ class ArticleEdit extends React.Component {
         };
         return (
             <Card className="article-edit" title="文章编辑">
-                <Row>                    
-                    <Col span={8}>
-                        <FormItem  {...layoutCol} label="标签">
-                            <Select name="tag" onChange={v => this.handleSelect(v, "tag")} style={{width: "100%" }}>
-                                {
-                                this.state.tagList.map((tag, key) => (
-                                    <Option key={key} value={tag.tag_name}> {tag.tag_name}</Option>
-                                ))
-                                }
-                            </Select>    
-                        </FormItem>
-                    </Col>
+                <Row>   
                     <Col span={12}>
                         <FormItem  {...layoutCol} label="文章">
-                            <Select name="article" onChange={v => this.handleSelect(v, "city")} style={{width: "100%" }}>
+                            <Select name="article" 
+                                onChange={val => this.setState({ currentSelect: val })} 
+                                style={{width: "100%" }}
+                            >
                                 {
-                                this.state.tagList.map((tag, key) => (
-                                    <Option key={key} value={tag.tag_id}> {tag.tag_name}</Option>
+                                this.state.articleList.map((article, key) => (
+                                    <Option key={key} value={article.id}> {article.title}</Option>
                                 ))
                                 }
                             </Select>    
@@ -181,7 +182,11 @@ class ArticleEdit extends React.Component {
                     <Col span={20}>
                         <Row style={{marginBottom: 10}} type="flex" justify="end"> 
                             <Button onClick={this.initEditor} icon="plus" type="primary">新增</Button>
-                            <Button onClick={this.modify} style={{marginLeft: "8px"}} icon="edit" type="primary">修改</Button>
+                            <Button onClick={this.handleModifyClick} 
+                                style={{marginLeft: "8px"}} 
+                                icon="edit" 
+                                type="primary"
+                            >修改</Button>
                         </Row>   
                     </Col>                
                 </Row>

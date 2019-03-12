@@ -18,7 +18,7 @@ export default connect(
         return (
             <div className="admin">
             {
-                this.props.user ? 
+                
                 <Tabs tabPosition="left" type="card">
                     <TabPane tab="文章编辑" key="1">
                         <ArticleEdit />
@@ -26,8 +26,7 @@ export default connect(
                     <TabPane tab="属性" key="2">
                         <TagEdit/>
                     </TabPane>
-                </Tabs> :
-                <img src={noPermission} style={{display: "block", margin: "auto"}} />
+                </Tabs>
             } 
             </div>
         )

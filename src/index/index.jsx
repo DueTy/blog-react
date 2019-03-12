@@ -25,9 +25,12 @@ const render = Component => {
     );
 };
 
-render(RouterVew);
-
 
 if (module.hot) {
-    module.hot.accept();
+    module.hot.accept(() => {
+        console.log("hot render");
+        render(RouterVew);
+    });
 }
+
+render(RouterVew);

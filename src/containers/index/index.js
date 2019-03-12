@@ -13,17 +13,16 @@ class Index extends React.Component {
             currentPage: 1,
             total: 0
         }
-        this.getListData = this.getListData.bind(this);
     }
-    getListData(page){
+    getListData = page => {
         axios.get("/getArticleList", {
             params: {
                 page: page
             }
         }).then(res => {
+            
             this.setState({
-                list: res.data,
-                total: 10
+                list: res.data.result
             });
         });
     }
@@ -62,19 +61,18 @@ class Index extends React.Component {
                     pagination={pagination}
                     size="large"
                     dataSource={this.state.list}
-                    renderItem={
-                        (item, key) => (
-                            <List.Item
+                    renderItem={(item, key) => (
+                        <List.Item
                             key={item.title}
                             actions={
                                 [
                                     <IconText type="message" text={item.commentSize} />,
-                                    <IconText type="tags-o" text={ item.tags.split(',').map(tag => (
-                                            <Tag color={colors[Math.floor(Math.random() * colors.length)]} key={tag}>{tag}</Tag>
+                                    <IconText type="tags-o" text={ item.tags.split(',').map((tag, tagKey) => (
+                                            <Tag color={colors[Math.floor(Math.random() * colors.length)]} key={tagKey}>{tag}</Tag>
                                         ))
                                     } />,
                                     <IconText type="folder" text={
-                                        <Tag color="orange" key={item.catalog.id}>{item.catalog.name}</Tag>
+                                        <Tag color="orange" key={key}>{item.type}</Tag>
                                     } />
                                 ]
                             }   
@@ -85,7 +83,7 @@ class Index extends React.Component {
                                 <List.Item.Meta
                                     className="list-item"
                                     title={item.title}
-                                    description={item.summary}
+                                    description={item.abstract}
                                     onClick={()=>this.props.history.push(`/app/article/${item.id}`)} 
                                 />
                             </List.Item>

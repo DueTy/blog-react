@@ -1,6 +1,7 @@
 node_modules/*
 express-router/db-config.js
 dist/*
+!dist/static
 yarn.lock
 yarn-error.log
 package-lock.json
