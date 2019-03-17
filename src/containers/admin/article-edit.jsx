@@ -1,7 +1,6 @@
 import React from "react";
 import  { Card, Select, Form, Col, Row, Button, message, Badge, Tag, Input } from "antd";
 import axios from "axios";
-import editorConfig from "./editor-config";
 const Option = Select.Option;
 const FormItem = Form.Item;
 
@@ -49,7 +48,7 @@ class ArticleEdit extends React.Component {
             this.setState({ articleList });
         });
     }
-    tagSelect = inde => {
+    tagSelect = index => {
 
         let tagList = this.state.tagList,
             article = this.state.article,
@@ -170,9 +169,9 @@ class ArticleEdit extends React.Component {
                                 style={{width: "100%" }}
                             >
                                 {
-                                this.state.articleList.map((article, key) => (
-                                    <Option key={key} value={article.id}> {article.title}</Option>
-                                ))
+                                    this.state.articleList.map((article, key) => (
+                                        <Option key={key} value={article.id}> {article.title}</Option>
+                                    ))
                                 }
                             </Select>    
                         </FormItem>
@@ -204,21 +203,21 @@ class ArticleEdit extends React.Component {
                     <Row type="flex" justify="end">
                         <Col span={18}>
                             {
-                            this.state.tagList.length ? 
-                                <div>
-                                    {
-                                    this.state.tagList.map((tag, key) => (
-                                        <Badge
-                                            className="tag-bge"
-                                            onClick={() => this.tagSelect(key)}
-                                            dot={tag.selected}
-                                            key={key}>
-                                            <Tag>  {tag.tag_name}</Tag>
-                                        </Badge>
-                                    ))
-                                    }
-                                </div> : 
-                            null
+                                this.state.tagList.length ? 
+                                    <div>
+                                        {
+                                            this.state.tagList.map((tag, key) => (
+                                                <Badge
+                                                    className="tag-bge"
+                                                    onClick={() => this.tagSelect(key)}
+                                                    dot={tag.selected}
+                                                    key={key}>
+                                                    <Tag>  {tag.tag_name}</Tag>
+                                                </Badge>
+                                            ))
+                                        }
+                                    </div> : 
+                                    null
                             }       
                             <p style={{marginTop: 10, display: this.state.article.tag ? "block" : "none"}}>
                                 标签: {this.state.article.tag}

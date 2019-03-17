@@ -1,9 +1,6 @@
 import React from "react";
 import axios from "axios";
 import hljs from "highlight.js/lib/highlight";
-import javascript from "highlight.js/lib/languages/javascript";
-
-import marked from "marked";
 import { Card, Tag, Row, Col, Icon } from "antd";
 
 import { colors, timerTrans } from "../../utils";
@@ -58,9 +55,9 @@ class Article extends React.Component {
                             </Tag>,
                             <span style= {{marginTop: 10}} key="time">
                                 {
-                                this.state.article.created_at
-                                ? timerTrans(this.state.article.created_at)
-                                : null
+                                    this.state.article.created_at
+                                        ? timerTrans(this.state.article.created_at)
+                                        : null
                                 }
                             </span>
                         ]}>

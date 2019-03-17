@@ -17,7 +17,7 @@ class PageSider extends React.Component {
         this.getRecent = this.getRecent.bind(this);
         this.getTags = this.getTags.bind(this);
     }
-    getRecent(){
+    getRecent() {
         this.setState({
             recent: [
                 "入门到放弃", "JavaScript", "react"
@@ -35,7 +35,7 @@ class PageSider extends React.Component {
         this.getRecent();
         this.getTags();
     }
-    render(){
+    render() {
         return(
             <div className="page-sider">
                 <section className="avator-container block">
@@ -47,17 +47,17 @@ class PageSider extends React.Component {
                 </section>
                 <section className="recent-container block">
                     <Card title="最近文章">
-                    {
-                        this.state.recent.length ? <ul className="recent-list">
                         {
-                            this.state.recent.map((article, key) => (
-                                <li className="recent-item" key={key}>
-                                    {article}
-                                </li>
-                            ))
+                            this.state.recent.length ? <ul className="recent-list">
+                                {
+                                    this.state.recent.map((article, key) => (
+                                        <li className="recent-item" key={key}>
+                                            {article}
+                                        </li>
+                                    ))
+                                }
+                            </ul> : null
                         }
-                        </ul> : null
-                    }
                     </Card>
                 </section>
                 <section className="tag-container block">
@@ -78,9 +78,9 @@ class PageSider extends React.Component {
                     </Card>
                 </section>
             </div>
-        )
+        );
     }
-};
+}
 
 export default PageSider;
 

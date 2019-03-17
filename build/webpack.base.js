@@ -41,28 +41,47 @@ module.exports = {
     entry: genEntries(config.entries), // 使用生成的entry
     output: {
         path: resolve("dist"),
-        filename: "[name].[hash:8].js"
+        filename: "[name].[hash:8].js",
+        chunkFilename: "js/[name].[chunkhash:6].chunk.js"
     },
     resolve: {
-        extensions: [".js", ".jsx", ".css", ".json"],
-        alias: {} // 配置别名可以加快webpack查找模块的速度
+        modules: [path.resolve(__dirname, "../../node_modules")],
+        extensions: [".js", ".jsx", ".json"],
+        alias: {
+            "@": path.resolve(__dirname, "../src")
+        }
     },
     module: {
         rules: [
             {
                 test: /\.css$/,
-                use: ["css-hot-loader", MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"]
+                use: [
+                    "css-hot-loader", 
+                    MiniCssExtractPlugin.loader, 
+                    "css-loader", 
+                    "postcss-loader"
+                ],                
+                include: path.resolve(__dirname, "../src"),
+                exclude: /node_modules/
             },
             {
                 test: /\.less$/,
                 use: ["css-hot-loader", MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "less-loader"],
-                include: [resolve("src")],
+                include: [
+                    resolve("src")
+                ],
                 exclude: /node_modules/
             },
             {
                 test: /\.jsx?$/,
-                loader: "happypack/loader?id=happy-babel-js",
-                include: [ resolve("src") ],
+                loaders: [        
+                    "happypack/loader?id=happy-babel-js",            
+                    "babel-loader",
+                    "eslint-loader"
+                ],
+                include: [ 
+                    resolve("src") 
+                ],
                 exclude: /node_modules/
             },
             { 

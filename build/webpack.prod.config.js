@@ -28,7 +28,7 @@ module.exports = merge(baseConfig, {
         ]),
         new CleanWebpackPlugin(["dist"], {
             root: path.join(__dirname, ".."),
-            exclude: ["manifest.json", "vendor.dll.js", "static"],
+            exclude: ["manifest.json", "vendor.dll.js"],
             verbose: true,
             dry: false
         }),

@@ -2,7 +2,7 @@
     "entries": [
         {
             "name": "index",
-            "path": "src/index",
+            "path": "src/",
             "index": "index.html"
         }
     ],
@@ -11,6 +11,6 @@
         "dist": "dist"
     },
     "dll-sources": [
-        "react", "react-dom", "react-redux", "react-router-dom", "redux"
+        "react", "react-dom", "react-router-dom"
     ]
 }

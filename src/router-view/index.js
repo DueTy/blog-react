@@ -8,8 +8,8 @@ import PageHeader from "../components/header";
 import PageSider from "../components/sider";
 const { Footer } = Layout;
 
-class RouterView extends React.Component{
-    render(){
+class RouterView extends React.Component {
+    render() {
         return(
             <Router>
                 <Layout>
@@ -20,19 +20,19 @@ class RouterView extends React.Component{
                             md={{ span: 16 }}
                             xs={{ span: 24 }}
                             className="view-container">
-                                <Route exact path="/" render={ () => <Redirect to="/app/index" /> } />
-                                {
-                                    routes.map(({key, path, component, props}) => (
-                                        <Route 
-                                            exact
-                                            key={key}
-                                            path={path}
-                                            store={this.props.store}
-                                            component={component}
-                                            {...props}
-                                        />
-                                    ))
-                                }
+                            <Route exact path="/" render={() => <Redirect to="/app/index" />} />
+                            {
+                                routes.map(({key, path, component, props}) => (
+                                    <Route 
+                                        exact
+                                        key={key}
+                                        path={path}
+                                        store={this.props.store}
+                                        component={component}
+                                        {...props}
+                                    />
+                                ))
+                            }
                         </Col>
                         <Col
                             lg={{ span: 6, offset: 1 }}
@@ -49,7 +49,7 @@ class RouterView extends React.Component{
                     </Footer>
                 </Layout>
             </Router>
-        )
+        );
     }
 }
 

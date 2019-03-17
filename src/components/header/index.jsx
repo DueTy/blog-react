@@ -14,7 +14,7 @@ export default connect(
     state => state.user,
     { loginSuccess, logout }
 )(class PageHeader extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -30,21 +30,21 @@ export default connect(
             this[funSet[i]] = this[funSet[i]].bind(this);
         }
     }
-    componentWillMount(){
+    componentWillMount() {
         this.checkStatus();
     }
-    menuClick({key}){
+    menuClick({key}) {
         this.setState({
             nav: key
         });       
     }
-    loginHide(){
+    loginHide() {
         this.setState({ loginShow: false });
     }
-    loginShow(){
+    loginShow() {
         this.setState({ loginShow: true });        
     }
-    checkStatus(){
+    checkStatus() {
         axios.get("/checkStatus").then(res => {
             if (res.data.isLogin) {
                 let userData = res.data.isLogin;
@@ -62,13 +62,12 @@ export default connect(
                 <Col
                     lg={{span: 4}}
                     md={{span: 4}}
-                    xs={{span: 0}}>                
-                </Col>
+                    xs={{span: 0}} />
                 <Col
                     lg={{span: 14}}
                     md={{span: 14}}
                     xs={{span: 0}}>
-                    <Navigat onClick={this.menuClick} menus={menus} mode="horizontal"/>
+                    <Navigat onClick={this.menuClick} menus={menus} mode="horizontal" />
                 </Col>
                 
                 <Col
@@ -77,23 +76,23 @@ export default connect(
                     xs={{span: 0}}>
                     
                     <div className="personal">
-                    {
-                        this.props.user ? 
-                        <Button
-                            onClick={ this.loginShow }
-                            ghost
-                            size="small"
-                            type="primary">
-                            <Link to="/app/admin">后台管理</Link>
-                        </Button> : 
-                        <Button
-                            onClick={ this.loginShow }
-                            ghost
-                            size="small"
-                            type="primary">
-                            登录
-                        </Button> 
-                    }
+                        {
+                            this.props.user ? 
+                                <Button
+                                    onClick={this.loginShow}
+                                    ghost
+                                    size="small"
+                                    type="primary">
+                                    <Link to="/app/admin">后台管理</Link>
+                                </Button> : 
+                                <Button
+                                    onClick={this.loginShow}
+                                    ghost
+                                    size="small"
+                                    type="primary">
+                                    登录
+                                </Button> 
+                        }
                     </div>
                    
                 </Col>
@@ -101,7 +100,7 @@ export default connect(
                     this.props.user ? null : <Login visible={this.state.loginShow} hide={this.loginHide} />
                 }
             </Row>
-        )
+        );
     }
 });
 

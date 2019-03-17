@@ -5,8 +5,8 @@ import axios from "axios";
 import { colors } from "../../utils";
 
 
-class TabEdit extends React.Component{
-    constructor(props){
+class TabEdit extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
             tagList: [],
@@ -20,11 +20,11 @@ class TabEdit extends React.Component{
         this.modifyTag = this.modifyTag.bind(this);
         this.handleIptChange = this.handleIptChange.bind(this);
     }
-    componentWillMount(){
+    componentWillMount() {
         this.getTags();
     }
-    getTags(){        
-        axios.get("/getTag").then((res) => {
+    getTags() {        
+        axios.get("/getTag").then(res => {
             if (res.data.code) {
                 this.setState({
                     tagList: res.data.result
@@ -32,13 +32,13 @@ class TabEdit extends React.Component{
             }
         });
     }
-    selectTag(tag){
+    selectTag(tag) {
         this.setState({
             tagEdit: tag.tag_name,
             curTag: tag.tag_id
         });
     }
-    modifyTag(){
+    modifyTag() {
         if (!this.state.curTag) {
             message.error("请选择tag后进行修改");
             return false;
@@ -48,14 +48,14 @@ class TabEdit extends React.Component{
             name: this.state.tagEdit,
             id: this.state.curTag
         };
-        axios.post("/modifyTag", data).then((res) => {
+        axios.post("/modifyTag", data).then(res => {
             message.info(res.data.message);
             if (res.data.code) {
                 this.getTags();
             }           
         });
     }
-    addTag(){
+    addTag() {
         let data = {
             name: this.state.tagEdit
         };
@@ -65,7 +65,7 @@ class TabEdit extends React.Component{
             return false;
         }
         
-        axios.post("/addTag", data).then((res) => {
+        axios.post("/addTag", data).then(res => {
             if (res.data.code) {
                 message.info(res.data.message);
                 this.getTags();
@@ -75,41 +75,46 @@ class TabEdit extends React.Component{
             }
         });
     }
-    handleIptChange(e){
+    handleIptChange(e) {
         this.setState({
             [e.target.name]: e.target.value
         });        
     }
-    render(){
+    render() {
         return (
             <Card className="tag-edit" title="标签">
                 {
                     this.state.tagList.length ? 
-                    <div>
-                    {
-                        this.state.tagList.map((tag, key) => (
-                            <Tag
-                                onClick={ () => this.selectTag(tag) }
-                                color={colors[Math.floor(Math.random() * colors.length)]}
-                                key={key}>
-                                {tag.tag_name}
-                            </Tag>
-                        ))
-                    }
-                    </div> : 
-                    null
+                        <div>
+                            {
+                                this.state.tagList.map((tag, key) => (
+                                    <Tag
+                                        onClick={() => this.selectTag(tag)}
+                                        color={colors[Math.floor(Math.random() * colors.length)]}
+                                        key={key}>
+                                        {tag.tag_name}
+                                    </Tag>
+                                ))
+                            }
+                        </div> : 
+                        null
                 }
                 <Row style={{marginTop: "10px"}}>
                     <Col span="12">                    
-                        <Input addonBefore="标签名称" name="tagEdit" value={ this.state.tagEdit } onChange={ this.handleIptChange } />
+                        <Input 
+                            addonBefore="标签名称" 
+                            name="tagEdit" value={this.state.tagEdit} 
+                            onChange={this.handleIptChange} 
+                        />
                     </Col>
                     <Col offset="1" span="8">
-                        <Button onClick={ this.addTag } icon="plus" type="primary">新增</Button>
-                        <Button onClick={ this.modifyTag } style={{marginLeft: "8px"}} icon="edit" type="primary">修改</Button>
+                        <Button onClick={this.addTag} icon="plus" type="primary">新增</Button>
+                        <Button onClick={this.modifyTag} style={{marginLeft: "8px"}} icon="edit" type="primary">修改</Button>
                     </Col>
                 </Row>
             </Card>
-        )
+        );
     }
-};
+}
+
 export default TabEdit;

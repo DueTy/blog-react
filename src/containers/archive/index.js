@@ -5,8 +5,8 @@ import {  Row, Col, List } from "antd";
 import "./index.less";
 import { timerTrans } from "../../utils";
 
-class ArchivePage extends React.Component{
-    constructor(props){
+class ArchivePage extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
             currentPage: 1,
@@ -16,7 +16,7 @@ class ArchivePage extends React.Component{
 
         this.getListData = this.getListData.bind(this);
     }
-    getListData(page){
+    getListData(page) {
         axios.get("/getArchiveList", {
             params: {
                 page: page 
@@ -28,21 +28,21 @@ class ArchivePage extends React.Component{
             });
         });
     }
-    componentDidMount(){
+    componentDidMount() {
         this.getListData(1);
     }
-    render(){        
+    render() {        
         const pagination = {
             pageSize: 5,
             current: this.state.currentPage,
             total: this.state.total,
             size: "small",
-            onChange: ((page, pageSize) => {
+            onChange: (page, pageSize) => {
                 this.getListData(page);
                 this.setState({
                     currentPage: page
                 });
-            })
+            }
         };
         return (
             <Row
@@ -53,30 +53,30 @@ class ArchivePage extends React.Component{
                     xs={{ span: 22 }}
                     className="archive-wrapper"
                 >
-                <List
-                    className="archive-list"
-                    itemLayout="vertical"
-                    pagination={pagination}
-                    size="large"
-                    dataSource={this.state.list}
-                    header={this.state.year}
-                    renderItem={
-                        (item, key) => (
-                            <List.Item
-                            key={key}
-                            extra={timerTrans(item.created_at)}
-                            style={{cursor: "pointer"}}
-                            >
-                            <List.Item.Meta description={item.title} />    
-                            </List.Item>
-                        )
-                    }
-                />                
+                    <List
+                        className="archive-list"
+                        itemLayout="vertical"
+                        pagination={pagination}
+                        size="large"
+                        dataSource={this.state.list}
+                        header={this.state.year}
+                        renderItem={
+                            (item, key) => (
+                                <List.Item
+                                    key={key}
+                                    extra={timerTrans(item.created_at)}
+                                    style={{cursor: "pointer"}}
+                                >
+                                    <List.Item.Meta description={item.title} />    
+                                </List.Item>
+                            )
+                        }
+                    />                
                 </Col>
             </Row>
-        )
+        );
     }
-};
+}
 
 
 export default ArchivePage;

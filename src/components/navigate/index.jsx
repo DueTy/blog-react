@@ -10,7 +10,7 @@ const renderMenuItem = ({ key, title, icon, link, ...props }) =>
             {icon && <Icon type={icon} style={{marginLeft: "-4px", marginRight: "8px"}} />}
             <span className="nav-text">{title}</span>
         </Link>
-    </Menu.Item>
+    </Menu.Item>;
 
 const renderSubMenu = ({ key, title, icon, link, sub, ...props }) =>
     <Menu.SubMenu
@@ -24,12 +24,12 @@ const renderSubMenu = ({ key, title, icon, link, sub, ...props }) =>
         {...props}
     >
         {sub && sub.map(item => renderMenuItem(item))}
-    </Menu.SubMenu>
+    </Menu.SubMenu>;
 
 export default ({ menus, ...props }) => 
-<Menu {...props} defaultSelectedKeys={[menus[0].key]}>
-    {menus && menus.map(
-        item => item.sub && item.sub.length ?
-            renderSubMenu(item) : renderMenuItem(item)
-    )}
-</Menu>
+    <Menu {...props} defaultSelectedKeys={[menus[0].key]}>
+        {menus && menus.map(
+            item => item.sub && item.sub.length ?
+                renderSubMenu(item) : renderMenuItem(item)
+        )}
+    </Menu>;

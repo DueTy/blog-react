@@ -16,38 +16,38 @@ export function user(state = defaultState, action) {
                 ...state,
                 user: action.payload.user,
                 msg: action.payload.msg
-            }
+            };
         case LOGOUT:
             return {
                 user: "",
                 msg: "",
                 refresh: 0
-            }
+            };
         case LOGIN_FAILURE:
         default:
-            return state
+            return state;
     }
 }
 
-//登录成功
+// 登录成功
 export function loginSuccess(data) {
     return {
         type: LOGIN_SUCCESS,
         payload: data
-    }
+    };
 }
-//登录失败
+// 登录失败
 export function loginFailure(data) {
     return {
         type: LOGIN_FAILURE,
         payload: data
-    }
+    };
 }
-//登出成功
+// 登出成功
 export function logout() {
     return {
         type: LOGOUT
-    }
+    };
 }
 
 export default {
