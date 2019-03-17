@@ -17,7 +17,15 @@ const devWebpackConfig = merge(baseConfig, {
         hot: true, // 热加载
         contentBase: path.join(__dirname, "..", paths.dist), // 静态文件根目录
         overlay: true,
-        compress: false // 服务器返回浏览器的时候是否启动gzip压缩
+        port: 8090,
+        compress: false, // 服务器返回浏览器的时候是否启动gzip压缩,
+        proxy: {
+            "/api": {
+                target: "http://localhost:8080",
+                pathRewrite: { "^/api": "" },
+                changeOrigin: true
+            }
+        }
     },
     watchOptions: {
         ignored: /node_modules/, // 忽略不用监听变更的目录

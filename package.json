@@ -4,10 +4,11 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build": "cross-env NODE_ENV='production' webpack --config build/webpack.prod.config.js --mode production",
-        "dev": "set NODE_ENV='development' && nodemon --config ./express-router/nodemon-config.json ./server/app",
+        "dev": "cross-env NODE_ENV=development webpack-dev-server --config ./build/webpack.dev.config.js",
         "dll": "webpack --config build/webpack.dll.config.js --mode production",
-        "start": "node ./server/app"
+        "build": "cross-env NODE_ENV=production webpack --config ./build/webpack.prod.config.js",
+        "start": "json-server --watch ./db.json --port 8080 --static ./dist",
+        "server": "cross-env NODE_ENV=development node ./server/app"
     },
     "repository": {
         "type": "git",

@@ -1,6 +1,5 @@
 import React from "react";
 import { Row, Col, Button } from "antd";
-import axios  from "axios";
 import Navigat from "../navigate";
 import Login from "../login";
 import { menus } from "../../common/menus";
@@ -9,6 +8,7 @@ import { loginSuccess, logout } from "../../reducers/user";
 import { connect } from "react-redux";
 
 import "./index.less";
+import api from "@/common/api";
 
 export default connect(
     state => state.user,
@@ -45,7 +45,7 @@ export default connect(
         this.setState({ loginShow: true });        
     }
     checkStatus() {
-        axios.get("/checkStatus").then(res => {
+        api.checkStatus().then(res => {
             if (res.data.isLogin) {
                 let userData = res.data.isLogin;
 

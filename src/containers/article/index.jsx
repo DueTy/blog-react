@@ -1,11 +1,11 @@
 import React from "react";
-import axios from "axios";
 import hljs from "highlight.js/lib/highlight";
 import { Card, Tag, Row, Col, Icon } from "antd";
 
 import { colors, timerTrans } from "../../utils";
 
 import "./index.less";
+import api from "@/common/api";
 
 class Article extends React.Component {
     constructor(props) {
@@ -18,19 +18,18 @@ class Article extends React.Component {
         };
     }
     componentDidMount() {
-        console.log(123);
         console.log(hljs);
         this.state.id && this.getArticle(this.state.id);
         hljs.initHighlightingOnLoad();
     }
     getArticle = id => {
-        axios.get("getArticle",  {
+        api.getArticle({
             params: {
                 id: id
             }
         }).then(res =>  {
             this.setState({
-                article: res.data.result[0]
+                article: res.result[0]
             });
         });
     }

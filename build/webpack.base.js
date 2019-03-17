@@ -41,12 +41,10 @@ module.exports = {
     entry: genEntries(config.entries), // 使用生成的entry
     output: {
         path: resolve("dist"),
-        filename: "[name].[hash:8].js",
-        chunkFilename: "js/[name].[chunkhash:6].chunk.js"
+        filename: "[name].[hash:8].js"
     },
     resolve: {
-        modules: [path.resolve(__dirname, "../../node_modules")],
-        extensions: [".js", ".jsx", ".json"],
+        extensions: [".js", ".jsx", ".css", ".json"],
         alias: {
             "@": path.resolve(__dirname, "../src")
         }
@@ -55,21 +53,12 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/,
-                use: [
-                    "css-hot-loader", 
-                    MiniCssExtractPlugin.loader, 
-                    "css-loader", 
-                    "postcss-loader"
-                ],                
-                include: path.resolve(__dirname, "../src"),
-                exclude: /node_modules/
+                use: ["css-hot-loader", MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"]
             },
             {
                 test: /\.less$/,
                 use: ["css-hot-loader", MiniCssExtractPlugin.loader, "css-loader", "postcss-loader", "less-loader"],
-                include: [
-                    resolve("src")
-                ],
+                include: [resolve("src")],
                 exclude: /node_modules/
             },
             {
@@ -79,9 +68,7 @@ module.exports = {
                     "babel-loader",
                     "eslint-loader"
                 ],
-                include: [ 
-                    resolve("src") 
-                ],
+                include: [ resolve("src") ],
                 exclude: /node_modules/
             },
             { 

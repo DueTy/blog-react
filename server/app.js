@@ -7,10 +7,6 @@ const router = require("../express-router");
 const favicon = require("serve-favicon");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-    
-const webpack = require("webpack");
-const webpackMW = require("webpack-hot-middleware");
-const webpackDW = require("webpack-dev-middleware");
 
 let app = express();
 
@@ -26,20 +22,15 @@ var env = process.env.NODE_ENV;
 
 if (env) {
     
-    let webpackConfig = require("../build/webpack.dev.config"),
-        compiler = webpack(webpackConfig),
-        heartbeatS = 10;
-    
-    app.use(webpackDW(compiler, {        
-        logLevel: "warn", 
-        publicPath: webpackConfig.output.publicPath
-    }));
-    
-    app.use(webpackMW(compiler, {
-        log: console.log,
-        path: "/__webpack_hmr",
-        heartbeat: heartbeatS * 1000
-    }));
+    app.use(express.static(path.resolve(__dirname, "../dist")));
+
+    app.all("*", function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Content-Type");
+        res.header("Access-Control-Allow-Methods", "*");
+        res.header("Content-Type", "application/json;charset=utf-8");
+        next();
+    });
     
     if (require.main === module) {
         

@@ -1,9 +1,9 @@
 import React from "react";
-import axios from "axios";
 import {  Row, Col, List, Tag, Icon } from "antd";
 
 import "./index.less";
 import { colors, timerTrans } from "../../utils";
+import api from "@/common/api";
 
 class Index extends React.Component {
     constructor(props) {
@@ -15,16 +15,11 @@ class Index extends React.Component {
         };
     }
     getListData = page => {
-        axios.get("/getArticleList", {
+        api.getArticleList({
             params: {
                 page: page
             }
-        }).then(res => {
-            
-            this.setState({
-                list: res.data.result
-            });
-        });
+        }).then(res => this.setState({ list: res.result }));
     }
     componentDidMount() {
         this.getListData(1);
