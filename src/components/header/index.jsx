@@ -31,7 +31,7 @@ export default connect(
         }
     }
     componentWillMount() {
-        // this.checkStatus();
+        this.checkStatus();
     }
     menuClick({key}) {
         this.setState({
@@ -46,8 +46,8 @@ export default connect(
     }
     checkStatus() {
         api.checkStatus().then(res => {
-            if (res.data.isLogin) {
-                let userData = res.data.isLogin;
+            if (res.isLogin) {
+                let userData = res.isLogin;
 
                 this.props.loginSuccess({
                     user: userData.username,

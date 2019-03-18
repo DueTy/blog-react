@@ -1,8 +1,8 @@
 import React from "react";
 import { Modal, Input, Icon, Button, message } from "antd";
-import axios from "axios";
 
 import "./index.less";
+import api from "@/common/api";
 
 class Login extends React.Component {
     constructor(props) {
@@ -30,13 +30,13 @@ class Login extends React.Component {
             password: this.state.password
         };
 
-        axios.post("/login", data).then(res => {
-            if (!res.data.code) {
-                message.error(res.data.message);
+        api.login({ data }).then(res => {
+            if (!res.code) {
+                message.error(res.message);
             }
 
-            if (res.data.code) {
-                message.info(res.data.message);
+            if (res.code) {
+                message.info(res.message);
                 window.location.href = "/";
             }
         });
