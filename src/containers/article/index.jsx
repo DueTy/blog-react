@@ -1,8 +1,6 @@
 import React from "react";
-import hljs from "highlight.js/lib/highlight";
-import { Card, Tag, Row, Col, Icon } from "antd";
-
-import { colors, timerTrans } from "../../utils";
+import { Card, Tag, Row, Col, Icon, message } from "antd";
+import { colors, timerTrans } from "@/utils";
 
 import "./index.less";
 import api from "@/common/api";
@@ -18,12 +16,27 @@ class Article extends React.Component {
         };
     }
     componentDidMount() {
-        window.hljs = hljs;
         this.state.id && this.getArticle(this.state.id);
-        setTimeout(() => {
-            hljs.initHighlightingOnLoad();
-            
-        }, 3000);
+        this.loadHLJSScript();
+    }
+    loadHLJSScript = () => {        
+        let scriptTag = document.createElement("script");
+        scriptTag.setAttribute("type", "text/javascript");
+        scriptTag.onload = () =>  {
+            this.setState({ hljsLoaded: true });
+            this.highlightCode();
+        };
+        scriptTag.onerror = () =>  {
+            message.error("highlight资源加载失败");
+        };
+        scriptTag.setAttribute("src", "/static/assets/highlight/highlight.pack.js");
+        document.body.appendChild(scriptTag);
+    }
+    highlightCode = () => {        
+        const nodes = this.artiContent.querySelectorAll("pre code");            
+        for (let i = 0; i < nodes.length; i++) {
+            window.hljs.highlightBlock(nodes[i]);
+        }
     }
     getArticle = id => {
         api.getArticle({
@@ -64,7 +77,7 @@ class Article extends React.Component {
                             </span>
                         ]}>
                         <div className="article-tags">
-                            <span> {this.state.article.readSize} 次浏览</span>
+                            {/* <span> {this.state.article.readSize} 次浏览</span> */}
                             <IconText type="tags-o" text= {
                                 this.state.article.tags.split(",").map(tag => (
                                     <Tag
@@ -75,13 +88,12 @@ class Article extends React.Component {
                                 ))}
                             />
                         </div>
-                        <div className="article-content" 
+                        <div ref={ref => { this.artiContent = ref; }} 
                             dangerouslySetInnerHTML= {{
                                 __html: this.state.article.content
                             }}
                         />
                     </Card>
-
                 </Col>
             </Row>
         );

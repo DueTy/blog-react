@@ -5,7 +5,7 @@ const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin"); // 复制静态资源的插件
 const CleanWebpackPlugin = require("clean-webpack-plugin"); // 清空打包目录的插件
 const baseConfig = require("./webpack.base");
-// const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin; //打包分析
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin; //打包分析
 const merge = require("webpack-merge");
 
 const webpack = require("webpack");
@@ -60,7 +60,7 @@ module.exports = merge(baseConfig, {
                     removeAttributeQuotes: true // 压缩 去掉引号
                 }
             });
-        })
-        // new BundleAnalyzerPlugin()
+        }),
+        new BundleAnalyzerPlugin()
     ]
 });

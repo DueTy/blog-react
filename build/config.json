@@ -11,6 +11,6 @@
         "dist": "dist"
     },
     "dll-sources": [
-        "react", "react-dom", "react-router-dom"
+        "react", "react-dom", "react-router-dom", "redux", "react-redux"
     ]
 }
