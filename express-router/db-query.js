@@ -35,7 +35,7 @@ function adder(args, callback) {
 }
 
 function updater(args, callback) {
-    let sql = "update " + tables[args.table] + " set " + args.opt + " where " + args.condition;
+    let sql = `update ${tables[args.table]} set ${args.opt} where ${args.condition}`;
 
     connect.query(sql, (error, result) => {
         if (error) {

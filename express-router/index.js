@@ -136,7 +136,7 @@ router.post("/modifyTag", (req, res) => {
             
             Object.assign(args, {
                 table: "tag",
-                condition: "tag_id='" + reqBody.id + "'"
+                condition: `tag_id='${reqBody.id}'`
             });
 
             db.updater(args, (error, result) => {
@@ -179,8 +179,28 @@ router.post("/postArticle", (req, res) => {
                 id: result.affectedRows ? newId : ""
             }, result.affectedRows));
         });
-    }
+    } 
+});
+
+router.post("/modifyArticle", (req, res) => {
+
+    let reqBody = req.body,
+        args = {
+            table: "article",
+            condition: `id='${reqBody.article.id}'`
+        };
     
+    const article = reqBody.article;
+    article.content = article.content.replace(/"|'/gm, "\'\'");
+    article.abstract = article.abstract.replace(/"|'/gm, "\'\'");
+
+    args = Object.assign(packUpdate(reqBody.article), args);    
+
+    db.updater(args, (error, result) => {
+        res.send(packRes({
+            message: result ? "修改成功" : error
+        }, 1));
+    });
 });
 
 router.post("/login", (req, res) => {

@@ -18,9 +18,12 @@ class Article extends React.Component {
         };
     }
     componentDidMount() {
-        console.log(hljs);
+        window.hljs = hljs;
         this.state.id && this.getArticle(this.state.id);
-        hljs.initHighlightingOnLoad();
+        setTimeout(() => {
+            hljs.initHighlightingOnLoad();
+            
+        }, 3000);
     }
     getArticle = id => {
         api.getArticle({

@@ -1,8 +1,14 @@
 import React from "react";
-import  { Card, Select, Form, Col, Row, Button, message, Badge, Tag, Input } from "antd";
-import axios from "axios";
+import  { 
+    Card, Select, Form, 
+    Col, Row, Button, 
+    message, Badge, Tag, 
+    Input 
+} from "antd";
 const Option = Select.Option;
 const FormItem = Form.Item;
+
+import api from "@/common/api";
 
 class ArticleEdit extends React.Component {
     constructor(props) {
@@ -13,7 +19,7 @@ class ArticleEdit extends React.Component {
             articleList: [],
             editor: null,
             ckeLoaded: false,
-            curArticle: "",
+            isModify: false,
             article: {
                 tag: "",
                 title: ""
@@ -33,8 +39,8 @@ class ArticleEdit extends React.Component {
         this.importCkeditorJs();
     }
     getTags = () => {
-        axios.get("/getTag").then(res =>  {
-            let tagList = res.data.result.map((tag, key) =>  {
+        api.getTags().then(res =>  {
+            let tagList = res.result.map((tag, key) =>  {
                 tag.selected = false;
                 return tag;
             });            
@@ -42,8 +48,8 @@ class ArticleEdit extends React.Component {
         });
     }
     getArticles = () => {
-        axios.get("/getArticleList").then(res => {
-            const articleList = res.data.result;
+        api.getArticleList({}).then(res => {
+            const articleList = res.result;            
 
             this.setState({ articleList });
         });
@@ -65,13 +71,14 @@ class ArticleEdit extends React.Component {
         
         this.setState({ tagList, article });
     }
-    handleModifyClick = () => {
+    handleArticleSelectChange = id => {
         const article = this.state.articleList.filter(article => 
-            article.id === this.state.currentSelect
+            article.id === id
         )[0];
-        console.log(article);
-        console.log(this.state.editor);
-        this.state.editor.setData(article.content);
+
+        this.setState({ article, isModify: true }, () => {
+            this.state.editor.setData(article.content);
+        });
     }
     handleTitle = e => {
         let article = this.state.article;
@@ -88,7 +95,8 @@ class ArticleEdit extends React.Component {
         scriptTag.setAttribute("type", "text/javascript");
         scriptTag.onload = () =>  {
             message.info("cke资源加载完成");
-            this.setState({ ckeLoaded: true });             
+            this.setState({ ckeLoaded: true });   
+            this.initEditor();       
         };
         scriptTag.onerror = () =>  {
             message.error("cke资源加载失败");
@@ -120,9 +128,26 @@ class ArticleEdit extends React.Component {
         }
         return abstract;
     }
+    modifyArticle = () => {
+        let state = this.state,
+            article = state.article,
+            editor = state.editor;
+        
+        Object.assign(article, {            
+            content: editor.getData(),
+            abstract: editor.document.getBody().getText()
+        });
+        
+        const data = { article };
+        
+        api.modifyArticle({ data }).then(res => {
+            console.log(res);
+        });
+    }
     addArticle = () => {
-        let article = this.state.article,
-            editor = this.state.editor,
+        let state = this.state,
+            article = state.article,
+            editor = state.editor,
             data =  {
                 title: article.title || "随便写写",
                 tag: article.tag || "学习",
@@ -144,7 +169,7 @@ class ArticleEdit extends React.Component {
             return false;
         }
 
-        axios.post("/postArticle", data).then(res =>  {
+        api.addArticle({ data }).then(res =>  {
             if (res.data.code)  {
                 message.info(res.data.message);
                 this.setState({ curArticle: res.data.id });
@@ -155,79 +180,85 @@ class ArticleEdit extends React.Component {
         });
     }
     render() {
-        const layoutCol =  {
-            labelCol: { span: 4 },
-            wrapperCol: { span: 20 }
-        };
+        const 
+            state = this.state,
+            layoutCol =  {
+                labelCol: { span: 4 },
+                wrapperCol: { span: 20 }
+            };
         return (
             <Card className="article-edit" title="文章编辑">
-                <Row>   
-                    <Col span={12}>
-                        <FormItem  {...layoutCol} label="文章">
-                            <Select name="article" 
-                                onChange={val => this.setState({ currentSelect: val })} 
-                                style={{width: "100%" }}
-                            >
-                                {
-                                    this.state.articleList.map((article, key) => (
-                                        <Option key={key} value={article.id}> {article.title}</Option>
-                                    ))
-                                }
-                            </Select>    
-                        </FormItem>
-                    </Col>
-                </Row>
-                <Row> 
-                    <Col span={20}>
-                        <Row style={{marginBottom: 10}} type="flex" justify="end"> 
-                            <Button onClick={this.initEditor} icon="plus" type="primary">新增</Button>
-                            <Button onClick={this.handleModifyClick} 
-                                style={{marginLeft: "8px"}} 
-                                icon="edit" 
-                                type="primary"
-                            >修改</Button>
-                        </Row>   
-                    </Col>                
-                </Row>
-                <Row>                     
-                    <Col span={20}>
-                        <FormItem  {...layoutCol} label="文章标题">
-                            <Input onChange={this.handleTitle} value={this.state.article.title} />
-                        </FormItem>
-                    </Col>
-                </Row>
-                <Row>
-                    <div style={{margin: "10px 0"}}>
-                        <div id="editor" />
-                    </div>
-                    <Row type="flex" justify="end">
+                <Form>
+                    <Row>   
                         <Col span={18}>
-                            {
-                                this.state.tagList.length ? 
-                                    <div>
-                                        {
-                                            this.state.tagList.map((tag, key) => (
-                                                <Badge
-                                                    className="tag-bge"
-                                                    onClick={() => this.tagSelect(key)}
-                                                    dot={tag.selected}
-                                                    key={key}>
-                                                    <Tag>  {tag.tag_name}</Tag>
-                                                </Badge>
-                                            ))
-                                        }
-                                    </div> : 
-                                    null
-                            }       
-                            <p style={{marginTop: 10, display: this.state.article.tag ? "block" : "none"}}>
-                                标签: {this.state.article.tag}
-                            </p>                     
-                        </Col>
-                        <Col span={6} style={{textAlign: "right"}}>                            
-                            <Button onClick={this.addArticle} style={{marginLeft: 8}} type="primary">提交</Button>
+                            <FormItem  {...layoutCol} label="文章">
+                                <Select name="article" 
+                                    onChange={this.handleArticleSelectChange} 
+                                    style={{width: "100%" }}
+                                >
+                                    {
+                                        this.state.articleList.map((article, key) => (
+                                            <Option key={key} value={article.id}> {article.title}</Option>
+                                        ))
+                                    }
+                                </Select>    
+                            </FormItem>
+                        </Col>     
+                    </Row>
+                    <Row>                     
+                        <Col span={18}>
+                            <FormItem  {...layoutCol} label="文章标题">
+                                <Input onChange={this.handleTitle} value={this.state.article.title} />
+                            </FormItem>
                         </Col>
                     </Row>
-                </Row>
+                    <Row>
+                        <div style={{margin: "10px 0"}}>
+                            <div id="editor" />
+                        </div>
+                        <Row type="flex" justify="end">
+                            <Col span={18}>
+                                {
+                                    this.state.tagList.length ? 
+                                        <div>
+                                            {
+                                                this.state.tagList.map((tag, key) => (
+                                                    <Badge
+                                                        className="tag-bge"
+                                                        onClick={() => this.tagSelect(key)}
+                                                        dot={tag.selected}
+                                                        key={key}>
+                                                        <Tag>  {tag.tag_name}</Tag>
+                                                    </Badge>
+                                                ))
+                                            }
+                                        </div> : 
+                                        null
+                                }       
+                                <p style={{marginTop: 10, display: this.state.article.tag ? "block" : "none"}}>
+                                    标签: {this.state.article.tag}
+                                </p>                     
+                            </Col>
+                            <Col span={6} style={{textAlign: "right"}}>
+                                {
+                                    state.isModify ?                         
+                                        <Button 
+                                            onClick={this.modifyArticle} 
+                                            style={{marginLeft: 8}} 
+                                            size="small"
+                                            icon="edit"
+                                            type="primary">修改</Button> :
+                                        <Button 
+                                            onClick={this.addArticle} 
+                                            style={{marginLeft: 8}} 
+                                            size="small"
+                                            icon="save"
+                                            type="primary">提交</Button>
+                                } 
+                            </Col>
+                        </Row>
+                    </Row>
+                </Form>
             </Card>
         );
     }

@@ -31,7 +31,7 @@ export default connect(
         }
     }
     componentWillMount() {
-        this.checkStatus();
+        // this.checkStatus();
     }
     menuClick({key}) {
         this.setState({
