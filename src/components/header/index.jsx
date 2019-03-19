@@ -2,7 +2,7 @@ import React from "react";
 import { Row, Col, Button } from "antd";
 import Navigat from "../navigate";
 import Login from "../login";
-import { menus } from "../../common/menus";
+import { menus } from "@/common/menus";
 import { Link } from "react-router-dom";
 import { loginSuccess, logout } from "../../reducers/user";
 import { connect } from "react-redux";
