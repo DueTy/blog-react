@@ -20,7 +20,13 @@ class Article extends React.Component {
         this.loadHLJSScript();
         
     }
-    loadHLJSScript = () => {        
+    loadHLJSScript = () => {    
+
+        if(window.hljs) {
+            this.highlightCode();
+            return;
+        }    
+
         let scriptTag = document.createElement("script");
         scriptTag.setAttribute("type", "text/javascript");
         scriptTag.onload = () =>  {
@@ -34,11 +40,13 @@ class Article extends React.Component {
         scriptTag.setAttribute("src", "/static/assets/highlight/highlight.pack.js");
         document.body.appendChild(scriptTag);
     }
-    highlightCode = () => {        
-        const nodes = this.artiDom.querySelectorAll("pre code");            
-        for (let i = 0; i < nodes.length; i++) {
-            window.hljs.highlightBlock(nodes[i]);
-        }
+    highlightCode = () => {     
+        setTimeout(() => {
+            const nodes = document.querySelectorAll("pre code");            
+            for (let i = 0; i < nodes.length; i++) {
+                window.hljs.highlightBlock(nodes[i]);
+            }
+        }, 500); 
     }
     getArticle = id => {
         api.getArticle({
