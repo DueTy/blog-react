@@ -72,6 +72,16 @@ class ArticleEdit extends React.Component {
         this.setState({ tagList, article });
     }
     handleArticleSelectChange = id => {
+        if (!id) {
+            this.setState({ 
+                article: {
+                    tag: "",
+                    title: ""
+                }
+            });
+            this.state.editor.setData("");
+            return;
+        }
         const article = this.state.articleList.filter(article => 
             article.id === id
         )[0];
@@ -141,7 +151,7 @@ class ArticleEdit extends React.Component {
         const data = { article };
         
         api.modifyArticle({ data }).then(res => {
-            console.log(res);
+            message.info(res.message);
         });
     }
     addArticle = () => {
@@ -194,6 +204,8 @@ class ArticleEdit extends React.Component {
                                 <Select name="article" 
                                     onChange={this.handleArticleSelectChange} 
                                     style={{width: "100%" }}
+                                    disabled={!state.ckeLoaded}
+                                    allowClear
                                 >
                                     {
                                         this.state.articleList.map((article, key) => (

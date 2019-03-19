@@ -1,6 +1,6 @@
 const 
     express = require("express"),
-    { listItem, archiveItem, collectionItem, articleItem } = require("./list-item-sample"),
+    { archiveItem, collectionItem } = require("./list-item-sample"),
     db = require("./db-query");
 
 const 
@@ -157,13 +157,14 @@ router.post("/postArticle", (req, res) => {
         res.send(packRes({ message: "fail" }, 0));
     } else {
         let newId = uuidV4(),
+            curTime = getTime(),
             data = {
                 id: newId,
                 title: reqBody.title,
                 type: "arti",
                 tags: reqBody.tag,
-                created_at: getTime(),
-                modify_time: getTime(),
+                created_at: curTime,
+                modify_time: curTime,
                 content: reqBody.content,
                 abstract: reqBody.abstract,
                 size: calcuByteLength(reqBody.content),
