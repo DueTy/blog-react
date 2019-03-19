@@ -170,9 +170,8 @@ class ArticleEdit extends React.Component {
         }
 
         api.addArticle({ data }).then(res =>  {
-            if (res.data.code)  {
-                message.info(res.data.message);
-                this.setState({ curArticle: res.data.id });
+            if (res.code)  {
+                message.info(res.message);
             } else  {
                 message.error("添加失败");
             }
