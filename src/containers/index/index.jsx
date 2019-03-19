@@ -71,7 +71,6 @@ export default connect(
                                 ]}                         
                             >
                                 <List.Item.Meta
-                                    className="list-item"
                                     title={item.title}
                                     description={item.abstract}
                                     onClick={() => this.props.history.push(`/app/article/${item.id}`)} 
