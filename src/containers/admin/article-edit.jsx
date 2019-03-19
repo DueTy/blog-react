@@ -88,7 +88,7 @@ class ArticleEdit extends React.Component {
     }
     importCkeditorJs = () => {
         if (window.CKEDITOR)  {
-            this.setState({ ckeLoaded: true });   
+            this.setState({ ckeLoaded: true }, () => this.initEditor());
             return false;
         }
         let scriptTag = document.createElement("script");
