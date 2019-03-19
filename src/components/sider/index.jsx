@@ -1,11 +1,20 @@
 import React from "react";
 import { Card, Tag } from "antd";
 
-import avator from "../../assets/images/avator.png";
-import { colors } from "../../utils";
+import avator from "@/assets/images/avator.png";
+import { colors } from "@/utils";
 import "./index.less";
 
-class PageSider extends React.Component {
+import { Link } from "react-router-dom";
+import { listFetchedSuccess, listFetchedFailed } from "@/reducers/list";
+import { connect } from "react-redux";
+
+import api from "@/common/api";
+
+export default connect(
+    state => state.list,
+    { listFetchedSuccess, listFetchedFailed }
+)(class PageSider extends React.Component {
     constructor(props) {
         super(props);
 
@@ -13,26 +22,25 @@ class PageSider extends React.Component {
             recent: [],
             tags: []
         };
-
-        this.getRecent = this.getRecent.bind(this);
-        this.getTags = this.getTags.bind(this);
     }
-    getRecent() {
-        this.setState({
-            recent: [
-                "入门到放弃", "JavaScript", "react"
-            ]
+    getArticles = () => {
+
+        api.getArticleList({}).then(res => {
+            if(res.code) {
+                this.props.listFetchedSuccess(res.result);
+                this.setState({ recent: [ ...res.result.slice(0, 3) ] });
+            } else {
+                this.props.listFetchedFailed();
+            }
         });
     }
-    getTags() {
-        this.setState({
-            tags: [
-                "嘻嘻嘻", "哈哈哈", "学习", "入门到放弃", "JavaScript", "react"
-            ]
+    getTags = () => {
+        api.getTags({}).then(res => {
+            this.setState({ tags: res.result });
         });
     }
     componentDidMount() {
-        this.getRecent();
+        this.getArticles();
         this.getTags();
     }
     render() {
@@ -51,8 +59,10 @@ class PageSider extends React.Component {
                             this.state.recent.length ? <ul className="recent-list">
                                 {
                                     this.state.recent.map((article, key) => (
-                                        <li className="recent-item" key={key}>
-                                            {article}
+                                        <li 
+                                            className="recent-item"
+                                            key={key}>
+                                            <Link to={`/app/article/${article.id}`}>{article.title}</Link>
                                         </li>
                                     ))
                                 }
@@ -69,7 +79,7 @@ class PageSider extends React.Component {
                                         <Tag
                                             color={colors[Math.floor(Math.random() * colors.length)]}
                                             key={key}>
-                                            {tag}
+                                            {tag.tag_name}
                                         </Tag>
                                     ))
                                 }
@@ -80,7 +90,4 @@ class PageSider extends React.Component {
             </div>
         );
     }
-}
-
-export default PageSider;
-
+});

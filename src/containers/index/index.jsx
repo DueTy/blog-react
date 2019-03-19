@@ -1,11 +1,16 @@
 import React from "react";
 import {  Row, Col, List, Tag, Icon } from "antd";
+import { connect } from "react-redux";
 
 import "./index.less";
 import { colors, timerTrans } from "../../utils";
-import api from "@/common/api";
+// import api from "@/common/api";
 
-class Index extends React.Component {
+
+export default connect(
+    state => state.list
+    
+)(class Index extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -13,16 +18,6 @@ class Index extends React.Component {
             currentPage: 1,
             total: 0
         };
-    }
-    getListData = page => {
-        api.getArticleList({
-            params: {
-                page: page
-            }
-        }).then(res => this.setState({ list: res.result }));
-    }
-    componentDidMount() {
-        this.getListData(1);
     }
     render() {
         const pagination = {
@@ -55,7 +50,7 @@ class Index extends React.Component {
                         itemLayout="vertical"
                         pagination={pagination}
                         size="large"
-                        dataSource={this.state.list}
+                        dataSource={this.props.list}
                         renderItem={(item, key) => (
                             <List.Item
                                 key={item.title}
@@ -90,7 +85,4 @@ class Index extends React.Component {
             </Row>
         );
     }
-}
-
-
-export default Index;
+});
