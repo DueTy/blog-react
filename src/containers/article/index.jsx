@@ -18,13 +18,15 @@ class Article extends React.Component {
     componentDidMount() {
         this.state.id && this.getArticle(this.state.id);
         this.loadHLJSScript();
+        
     }
     loadHLJSScript = () => {        
         let scriptTag = document.createElement("script");
         scriptTag.setAttribute("type", "text/javascript");
         scriptTag.onload = () =>  {
-            this.setState({ hljsLoaded: true });
-            this.highlightCode();
+            this.setState({ hljsLoaded: true }, () => {
+                this.highlightCode();
+            });
         };
         scriptTag.onerror = () =>  {
             message.error("highlight资源加载失败");
@@ -33,7 +35,7 @@ class Article extends React.Component {
         document.body.appendChild(scriptTag);
     }
     highlightCode = () => {        
-        const nodes = this.artiContent.querySelectorAll("pre code");            
+        const nodes = this.artiDom.querySelectorAll("pre code");            
         for (let i = 0; i < nodes.length; i++) {
             window.hljs.highlightBlock(nodes[i]);
         }
@@ -88,7 +90,7 @@ class Article extends React.Component {
                                 ))}
                             />
                         </div>
-                        <div ref={ref => { this.artiContent = ref; }} 
+                        <div ref={ref => { this.artiDom = ref; }} 
                             dangerouslySetInnerHTML= {{
                                 __html: this.state.article.content
                             }}
