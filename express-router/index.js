@@ -244,7 +244,7 @@ router.post("/login", (req, res) => {
 router.get("/checkStatus", (req, res) => {
     let isLogin = req.cookies.isLogin;
     
-    res.send({ isLogin: !!isLogin });
+    res.send({ isLogin: isLogin ? isLogin : false });
 });
 
 module.exports = router;
