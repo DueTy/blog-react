@@ -193,6 +193,7 @@ router.post("/modifyArticle", (req, res) => {
     const article = reqBody.article;
     article.content = article.content.replace(/"|'/gm, "\'\'");
     article.abstract = article.abstract.replace(/"|'/gm, "\'\'");
+    article.modify_time = getTime();
 
     args = Object.assign(packUpdate(reqBody.article), args);    
 
@@ -242,10 +243,8 @@ router.post("/login", (req, res) => {
 
 router.get("/checkStatus", (req, res) => {
     let isLogin = req.cookies.isLogin;
-
-    if (isLogin) {
-        res.send({ isLogin });
-    }
+    
+    res.send({ isLogin: !!isLogin });
 });
 
 module.exports = router;
