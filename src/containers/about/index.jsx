@@ -16,7 +16,7 @@ class AboutMe extends React.Component {
                 </p>
                 <p>
                     <Icon type="github" style={iconStyle} />
-                    <a href="https://github.com/DueTy" target="_blank">求follow</a>
+                    <a href="https://github.com/DueTy" target="_blank">follow me!follow me!</a>
                     <Icon type="wechat" style={{ ...iconStyle, color: "#67C23A" }} />
                     bandit420770824
                     <Icon type="qq" style={iconStyle} />
