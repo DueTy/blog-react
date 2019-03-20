@@ -28,7 +28,7 @@ class ArticleEdit extends React.Component {
         };
 
         this.NAME_MAP =  {
-            tag: "标签",
+            tags: "标签",
             title: "文章标题",
             content: "文章内容"
         };
@@ -58,16 +58,15 @@ class ArticleEdit extends React.Component {
 
         let tagList = this.state.tagList,
             article = this.state.article,
-            tag = [];
+            tags = [];
 
         tagList[index].selected = !tagList[index].selected;
 
         tagList.forEach(item =>  {
-            item.selected && tag.push(item.tag_name);
+            item.selected && tags.push(item.tag_name);
         });
         
-        article.tag = tag.join(",");
-        
+        article.tags = tags.join(",");
         
         this.setState({ tagList, article });
     }
@@ -80,6 +79,7 @@ class ArticleEdit extends React.Component {
                 }
             });
             this.state.editor.setData("");
+            this.setState({ isModify: false });
             return;
         }
         const article = this.state.articleList.filter(article => 
@@ -160,7 +160,7 @@ class ArticleEdit extends React.Component {
             editor = state.editor,
             data =  {
                 title: article.title || "随便写写",
-                tag: article.tag || "学习",
+                tags: article.tags || "学习",
                 content: editor.getData(),
                 abstract: editor.document.getBody().getText(),
                 author: article.author || "DueTy"
@@ -177,7 +177,7 @@ class ArticleEdit extends React.Component {
 
         if (!flag)  {
             return false;
-        }
+        }        
 
         api.addArticle({ data }).then(res =>  {
             if (res.code)  {
@@ -247,7 +247,7 @@ class ArticleEdit extends React.Component {
                                         null
                                 }       
                                 <p style={{marginTop: 10, display: this.state.article.tag ? "block" : "none"}}>
-                                    标签: {this.state.article.tag}
+                                    标签: {this.state.article.tags}
                                 </p>                     
                             </Col>
                             <Col span={6} style={{textAlign: "right"}}>

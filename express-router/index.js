@@ -162,7 +162,7 @@ router.post("/postArticle", (req, res) => {
                 id: newId,
                 title: reqBody.title,
                 type: "arti",
-                tags: reqBody.tag,
+                tags: reqBody.tags,
                 created_at: curTime,
                 modify_time: curTime,
                 content: reqBody.content,
