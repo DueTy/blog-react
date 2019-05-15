@@ -43,7 +43,7 @@ export default connect(
                 <Col
                     lg={{ span: 22, offset: 1 }}
                     md={{ span: 22, offset: 1 }}
-                    xs={{ span: 22 }}
+                    xs={{ span: 24 }}
                     className="article-wrapper"
                 >
                     <List                  

@@ -36,7 +36,7 @@ export default connect(
     }
     getTags = () => {
         api.getTags({}).then(res => {
-            this.setState({ tags: res.result });
+            this.setState({ tags: res.result || [] });
         });
     }
     componentDidMount() {

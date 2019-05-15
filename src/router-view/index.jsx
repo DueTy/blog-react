@@ -37,7 +37,7 @@ class RouterView extends React.Component {
                         <Col
                             lg={{ span: 6, offset: 1 }}
                             md={{ span: 6, offset: 1 }}
-                            xs={{ span: 24 }}
+                            xs={{ span: 0 }}
                             className="sider-container">
                             <PageSider />
                         </Col>
