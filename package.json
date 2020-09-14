@@ -76,7 +76,7 @@
         "express-session": "latest",
         "extract-text-webpack-plugin": "^4.0.0-beta.0",
         "file-loader": "^2.0.0",
-        "morgan": "~1.7.0",
+        "morgan": "~1.9.1",
         "mysql": "latest",
         "nodemon": "^1.18.4",
         "nprogress": "^0.2.0",
